@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import web
 import feedparser
 
@@ -20,9 +21,17 @@ def cut(x):
 
 class index:
     def GET(self):
-        n = feedparser.parse('http://www.archlinux.org/feeds/news/')
-        ntitle = [x.title for x in n.entries]
-        nurl = [x.link for x in n.entries]
+        # Gets the current RSS news feed
+        # nfeed = news feed
+        nfeed = feedparser.parse('http://www.archlinux.org/feeds/news/')
+        
+        # ntitle = title of news feeds
+        ntitle = [x.title for x in nfeed.entries]
+        
+        # nurl = url of news feed
+        nurl = [x.link for x in nfeed.entries]
+        
+        #Stores title and url together into a tuple
         news = [ntitle, nurl]
         
         u = feedparser.parse('http://www.archlinux.org/feeds/packages/')
