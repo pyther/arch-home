@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; 
+charset=UTF-8" />
+        <title>Home Page</title>
+        <link rel="stylesheet" type="text/css" href="styles/style.css" 
+/>
+        <script type="text/javascript" 
+src="scripts/script.js"></script>
+    </head>
+    <body>
+        <div id="cont">
+                <img src="logo-3.png" alt="Logo" /><br />
+                <form name="sform" id="sform" method="get" action="">
+                <span><input type="radio" name="sub" value="1" 
+checked="checked" /> Google &nbsp;&nbsp;</span>
+                <span><input type="radio" name="sub" value="2" /> 
+ArchLinux Forum &nbsp;&nbsp;</span>
+                <span><input type="radio" name="sub" value="3" /> 
+ArchLinux Wiki &nbsp;&nbsp;</span>
+                <br />
+                <input type="text" size="40" name="q" id="q" /><input 
+type="submit" value="Search" id="search_btn" />
+                </form>
+                
+        </div>
+    </body>
+</html>
