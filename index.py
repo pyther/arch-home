@@ -14,6 +14,7 @@ render = web.template.render('templates')
 app = web.application(urls, globals())
 web.template.Template.globals['render'] = render
 
+#Truncates pkg name if it is to long...
 def cut(x):
     if len(x) > 23:
         x=x[:23]
@@ -34,12 +35,16 @@ class index:
         #Stores title and url together into a tuple
         news = [ntitle, nurl]
         
+        # Feed for new packages
         u = feedparser.parse('http://www.archlinux.org/feeds/packages/')
+
         pkg = [x.title for x in u.entries]
 
         i686 = []
         x86_64 = []
 
+        # This adds the truncated and full package name
+        # The i686 or x86_64 gets removed from the package name:
         for x in pkg:
             if x.find('i686') > 0:
                 if len(i686) < 5:
