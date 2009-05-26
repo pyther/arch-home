@@ -1,3 +1,41 @@
 arch-home
+Contact: pyther@pyther.net
+Website: http://pyther.net/projects/arch-home/
 
-Description: arch-home is an Archlinux homepage that is written in webpy. It shows the latest packages and news headlines. 
+Description: arch-home is a webpy script that generates an Arch Linux homepage.
+
+Features
+
+    * News Headlines
+    * Latest Packages
+    * Google, Arch Forums, Wiki, and Aur Search
+    * Arch Logo
+
+Dependencies:
+
+    * Python 2.6
+    * python-feedparser 4.1
+    * webpy 3.0
+
+  *Lower versions may work, but they have not been tested.
+
+
+Download:
+    Currently the source is being hosted at github: http://github.com/pyther/arch-home. You can checkout the code by running git clone git://github.com/pyther/arch-home.git
+
+
+How to use:
+    Configure your webserver to use this webpy script. For instructions on configuring your server with webpy see: Webpy Install
+
+
+Bugs/Feature Requests:
+    Please submit all bugs and feature requests here: http://github.com/pyther/arch-home/issues
+
+
+Things to Know:
+    *If the package name is longer than 23 characters it will be truncated. However if you hover over the package the a tooltip will appear with the full name.
+    *The rss feed gets downloaded to from the archlinux.org server everytime you visit it.
+
+TODO:
+    *Add booleans to turn feature on and off
+    *Add aur spot light as seen here: http://arch-start.appspot.com/ 
