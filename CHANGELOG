@@ -1,0 +1,14 @@
+CHANGELOG
+
+06/28/09
+    -Server now handles search requests (webpy). There is no longer a need for javascript.
+    -News bar stays on one line. overflow: hidden is set so the news items will not go into a new line
+    -If pkg names are to long they are display either as pkgname-pkgver or pkgname
+    -Minor css fixes/improvements
+    -RSS feeds are cached on the local server under arch-home/cache
+        *PKG feed is updated every 15 minutes
+        *News feed is updated every 30 minutes
+
+
+05/25/09
+    -Initial Import

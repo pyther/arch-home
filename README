@@ -17,15 +17,17 @@ Dependencies:
     * python-feedparser 4.1 - http://www.feedparser.org/
     * webpy 3.0 - http://webpy.org/
     * feedcache 1.3.1 - http://www.doughellmann.com/projects/feedcache/
-  *Lower versions may work, but they have not been tested.
 
 
 Download:
-    Currently the source is being hosted at github: http://github.com/pyther/arch-home. You can checkout the code by running git clone git://github.com/pyther/arch-home.git
 
+    - Development Code (git): http://github.com/pyther/arch-home 
+    - Stable Releases: http://github.com/pyther/arch-home/downloads
 
 How to use:
-    Configure your webserver to use this webpy script. For instructions on configuring your server with webpy see: Webpy Install
+
+    -Configure webserver to use this webpy script. (See webpy site for instructions)
+    -Execute ./index.py  (Use this only for personal usage, do not publish on the web!) 
 
 
 Bugs/Feature Requests:
@@ -33,9 +35,10 @@ Bugs/Feature Requests:
 
 
 Things to Know:
-    *If the package name is longer than 23 characters it will be truncated. However if you hover over the package the a tooltip will appear with the full name.
-    *The rss feed gets downloaded to from the archlinux.org server everytime you visit it.
+    *If the package name is longer than 28 characters it will be truncated. However if you hover over the package a tooltip will appear with the full name.
+    *The rss feed is cached: 15 min - pkgs, 30 min - news (Can be modified in index.py)
 
 TODO:
     *Add booleans to turn feature on and off
-    *Add aur spot light as seen here: http://arch-start.appspot.com/ 
+    *Add aur spot light as seen here: http://arch-start.appspot.com/
+     
