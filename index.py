@@ -132,6 +132,8 @@ class index:
 
         sub = int(i.sub)
         query = i.q
+
+        url=None
  
         if sub == 1:
             url="http://google.com/search?q="+query
@@ -141,8 +143,16 @@ class index:
             url='http://wiki.archlinux.org/index.php/Special:Search?search='+query
         elif sub == 4:
             url='http://aur.archlinux.org/packages.php?K='+query 
-        web.Found(url)
-        return
+        elif sub == 5:
+            url='http://bugs.archlinux.org/index.php?string='+query
+        
+        #Redirect if we have a url
+        if url:
+            web.Found(url)
+            return
+        else:
+            web.badrequest()
+            return "<h1>400 - Bad Request</h1>"
 
 if __name__ == "__main__":
     app.run()
