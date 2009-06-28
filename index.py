@@ -18,6 +18,9 @@ render = web.template.render('templates')
 app = web.application(urls, globals())
 web.template.Template.globals['render'] = render
 
+#Time until cached feeds expire
+timeToLiveSeconds=900
+
 #Truncates pkg name if it is to long...
 def cut(x):
     if len(x) > 23:
@@ -41,7 +44,6 @@ def get_newsFeed():
     return nfeed
 
 def get_pkgFeed():
-
     storage=shelve.open('./cache/pkgfeed_cache')
     fc = feedcache.Cache(storage)
 
