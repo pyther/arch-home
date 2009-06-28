@@ -19,7 +19,7 @@ app = web.application(urls, globals())
 web.template.Template.globals['render'] = render
 
 #Time until cached feeds expire
-timeToLiveSeconds=900
+timeToLiveSeconds=900   #15 Minutes
 
 #Truncates pkg name if it is to long...
 def cut(x):
@@ -94,6 +94,24 @@ class index:
  
 
         return render.index(news, i686, x86_64)
+
+    #This function will get the search query and process it...
+    def POST(self):
+        i = web.input()
+
+        sub = int(i.sub)
+        query = i.q
+ 
+        if sub == 1:
+            url="http://google.com/search?q="+query
+        elif sub == 2:
+            url='http://bbs.archlinux.org/search.php?action=search&keywords='+query+'&show_as=topics'
+        elif sub == 3:
+            url='http://wiki.archlinux.org/index.php/Special:Search?search='+query
+        elif sub == 4:
+            url='http://aur.archlinux.org/packages.php?K='+query 
+        web.Found(url)
+        return
 
 if __name__ == "__main__":
     app.run()

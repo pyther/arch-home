@@ -67,60 +67,6 @@ $def with (news, i686, x86_64)
                 margin-left: 20px;
             }
         </style>
-    
-        <script type="text/javascript">
-            function mySubmit()
-            {
-                subs = document.getElementsByName('sub')
-                sform = document.getElementById('sform')
-                q = document.getElementById('q')
-
-                if (subs[0].checked)
-                {
-                    q.name = "q"
-                    sform.action = "http://www.google.com/search"
-                }
-                else if (subs[1].checked)
-                {
-                    q.name = "keywords"
-                    var arch_trickery = document.createElement('input')
-                    arch_trickery.setAttribute('name', 'action')
-                    arch_trickery.setAttribute('value', 'search')
-                    arch_trickery.setAttribute('type', 'hidden')
-                    sform.appendChild(arch_trickery)
-                    sform.action = "http://bbs.archlinux.org/search.php"
-                }
-                else if (subs[2].checked)
-                {
-                    q.name = 'search'
-                    sform.action = "http://wiki.archlinux.org/index.php/Special:Search"
-                }
-                else if (subs[3].checked)
-                {
-                    q.name = 'K'
-                    sform.action = "http://aur.archlinux.org/packages.php?"
-                }
-
-                return true
-            }
-
-            function init()
-            {
-                q = document.getElementById('q')
-                q.focus()
-                q.select()
-
-                subm = document.getElementById('search_btn')
-                subm.onclick = function()
-                {
-                    return mySubmit()
-                }
-        }
-
-        if (document.getElementById)
-            window.onload = init
-    </script>
-        
     </head>
     <body>
         $#Links
@@ -134,7 +80,7 @@ $def with (news, i686, x86_64)
 	    </div> 
         <div id="cont">
                 <img src="static/logo.png" alt="Logo" /><br />
-                <form id="sform" name="sform" method="get" action="">
+                <form method="post" action="/">
                     <input type="radio" name="sub" value="1" checked="checked"/>Google &nbsp;&nbsp;
                     <input type="radio" name="sub" value="2"/> Arch Forum &nbsp;&nbsp;
                     <input type="radio" name="sub" value="3"/> Arch Wiki &nbsp;&nbsp;
@@ -142,7 +88,7 @@ $def with (news, i686, x86_64)
                     
                     <br /><br />
 
-                    <input id="q" type="text" size="40" name="q" /><input id="search_btn" type="submit" value="Search" />
+                    <input id="q" name="q" type="text" size="40" /><input id="search_btn" type="submit" value="Search" />
                 </form>
         </div>
         <div id="updates">
