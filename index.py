@@ -18,17 +18,43 @@ render = web.template.render('templates')
 app = web.application(urls, globals())
 web.template.Template.globals['render'] = render
 
-#Time until cached feeds expire
-timeToLiveSeconds=900   #15 Minutes
-
-#Truncates pkg name if it is to long...
 def cut(x):
-    if len(x) > 23:
-        x=x[:23]
-    return x
+    maxL = 28 #max charcaters before split
+  
+    p=['','']
+    #pkgn = package name
+    #pkgv = package version
+    #pkgr = package release
+
+    pkgn,pkgv=x.split(' ')[:2]
+    pkgv,pkgr=pkgv.split('-')
+    pkgr='-'+pkgr #addes a dash in front of release number
+ 
+    p[1]=pkgn+' '+pkgv+pkgr #Tooltip
+
+    #Remove the release number
+    if len(x) > maxL:
+        p[0]=pkgn+' '+pkgv
+
+        #Remove the pkg version
+        if len(p[0]) > maxL:
+            p[0]=pkgn
+       
+            #In the unsual case that the pkgname is bigger than the allowed max characters
+            #Cut the pkgname
+            if len(p[0]) > maxL:
+                p[0]=p[0][:maxL]
+
+    else:
+        p[0]=pkgn+' '+pkgv+pkgr
+
+    return p
 
 # Gets and stores a cached copy of the news feed
 def get_newsFeed():
+    
+    #Time until cached feeds expire
+    timeToLiveSeconds=1800   #30 Minutes
     
     #Stores file as .nfeed_cache in CWD
     storage = shelve.open('./cache/nfeed_cache')
@@ -44,6 +70,10 @@ def get_newsFeed():
     return nfeed
 
 def get_pkgFeed():
+   
+    #Time until cached feeds expire
+    timeToLiveSeconds=900   #15 Minutes
+
     storage=shelve.open('./cache/pkgfeed_cache')
     fc = feedcache.Cache(storage)
 
@@ -79,15 +109,16 @@ class index:
         i686 = []
         x86_64 = []
 
+
         # This adds the truncated and full package name
         # The i686 or x86_64 gets removed from the package name:
         for x in pkg:
             if x.find('i686') > 0:
-                if len(i686) < 5:
-                    i686.append( (cut(x.rstrip(' i686')), x.rstrip(' i686')) )
+                if len(i686) < 6:
+                    i686.append(cut(x))
             elif x.find('x86_64') > 0:
-                if len(x86_64) < 5:
-                    x86_64.append( (cut(x.rstrip(' x86_64')), x.rstrip(' x86_64')) )
+                if len(x86_64) < 6:
+                    x86_64.append(cut(x))
             else:
                 #Huh why are we here what changed?
                 pass
