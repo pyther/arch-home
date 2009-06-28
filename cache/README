@@ -1,0 +1,3 @@
+This is the directory that stores the cached feeds...
+
+Make sure this directory is writeable by the webserver!
