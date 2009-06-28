@@ -114,10 +114,10 @@ class index:
         # The i686 or x86_64 gets removed from the package name:
         for x in pkg:
             if x.find('i686') > 0:
-                if len(i686) < 6:
+                if len(i686) < 5:
                     i686.append(cut(x))
             elif x.find('x86_64') > 0:
-                if len(x86_64) < 6:
+                if len(x86_64) < 5:
                     x86_64.append(cut(x))
             else:
                 #Huh why are we here what changed?
