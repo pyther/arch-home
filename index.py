@@ -2,6 +2,10 @@
 
 import web
 import feedparser
+import feedcache
+
+import sys
+import shelve
 
 urls = (
   '/', 'index'
@@ -20,12 +24,41 @@ def cut(x):
         x=x[:23]
     return x
 
+# Gets and stores a cached copy of the news feed
+def get_newsFeed():
+    
+    #Stores file as .nfeed_cache in CWD
+    storage = shelve.open('./cache/nfeed_cache')
+    
+    fc = feedcache.Cache(storage)
+    
+    #Fetches the feed from cache or from the website
+    nfeed = fc.fetch('http://www.archlinux.org/feeds/news/')
+    
+    #Closes feed
+    storage.close()
+    
+    return nfeed
+
+def get_pkgFeed():
+
+    storage=shelve.open('./cache/pkgfeed_cache')
+    fc = feedcache.Cache(storage)
+
+    pkgs = fc.fetch('http://www.archlinux.org/feeds/packages/')
+    storage.close()
+
+    return pkgs
+
 class index:
     def GET(self):
+
         # Gets the current RSS news feed
         # nfeed = news feed
-        nfeed = feedparser.parse('http://www.archlinux.org/feeds/news/')
-        
+        #nfeed = feedparser.parse('http://www.archlinux.org/feeds/news/')
+        nfeed = get_newsFeed();
+
+
         # ntitle = title of news feeds
         ntitle = [x.title for x in nfeed.entries]
         
@@ -36,7 +69,8 @@ class index:
         news = [ntitle, nurl]
         
         # Feed for new packages
-        u = feedparser.parse('http://www.archlinux.org/feeds/packages/')
+        #u = feedparser.parse('http://www.archlinux.org/feeds/packages/')
+        u = get_pkgFeed()
 
         pkg = [x.title for x in u.entries]
 
