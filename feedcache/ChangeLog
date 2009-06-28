@@ -1,0 +1,109 @@
+2007-11-25  Doug Hellmann  <doug.hellmann@gmail.com>
+
+	* feedcache/test_server.py (TestHTTPServer.__init__): Initialize
+	the expected response.
+
+	* feedcache/cache.py (Cache.purge): Add a method to clear old
+	content from the cache.
+
+	* feedcache/test_server.py (TestHTTPHandler): Use a separate
+	method for handling each response code so we can have different
+	behaviors based on what the test wants returned.
+
+	* feedcache/test_cache.py (CacheRedirectHandlingTest): Add tests
+	for redirect handling.
+
+	* feedcache/cache.py (Cache.fetch): Update docstring to explain
+	how redirected URLs are handled.
+
+2007-09-02  Doug Hellmann  <doug.hellmann@gmail.com>
+
+	* README.txt: Add README.txt and LICENSE.txt.
+
+2007-08-21  Doug Hellmann  <doug.hellmann@gmail.com>
+
+	* feedcache/cache.py (Cache.fetch): Add force_update and offline
+	flags based on patch from Thomas Perl.
+
+2007-08-08  Doug Hellmann  <doug.hellmann@gmail.com>
+
+	* feedcache/example.py (main): Use Cache.fetch() instead of the
+	old Cache.__getitem__().
+
+2007-08-07  Doug Hellmann  <doug.hellmann@gmail.com>
+
+	* feedcache/test_server.py (TestHTTPHandler.do_GET): Clean up the
+	etag and modified date logic.
+
+2007-08-06  Doug Hellmann  <doug.hellmann@gmail.com>
+
+	* feedcache/cache.py (Cache.fetch): Change __getitem__ to fetch
+	since Cache does not support the rest of the dictionary API.
+
+	* feedcache/example.py: Remove logging configuration so log
+	messages are discarded quietly.
+
+	* feedcache/test_cache.py: Use dictionary instead of custom
+	MemoryStorage class.
+
+	* feedcache/cache.py (Cache.__getitem__): Use __getitem__ and
+	__setitem__ API with storage.
+
+2007-08-05  Doug Hellmann  <doug.hellmann@gmail.com>
+
+	* feedcache/storagebase.py (StorageBase.get): Merge getContent and
+	getModifiedTime into a single method, get, to avoid race
+	conditions between checking the time and using the data.
+
+	* feedcache/test_shelvestorage.py (ShelveStorageCacheTest): Add a
+	few integration tests using ShelveStorage with the Cache.
+
+	* feedcache/shelvestorage.py: Check that the storage is open
+	before allowing the caller to use it.  Handle KeyError exceptions
+	by returning None.
+
+	* feedcache/example.py (main): Simple example program that uses
+	the feed cache to retrieve feed data and print out the titles.
+
+2007-08-04  Doug Hellmann  <doug.hellmann@gmail.com>
+
+	* feedcache/test_server.py (TestHTTPHandler.do_GET): Only check
+	the ETag and If-Modified-Since header values if the server is
+	configured to apply them.
+
+	* feedcache/test_cache.py: Make all of the tests use the HTTP
+	server, and add a few additional checks.
+
+	* feedcache/cache.py (Cache.__getitem__): Only check the age of
+	the item in the cache if we have a time-to-live value.
+
+	* setup.py.in: Add requires=['feedparser'].
+
+	* feedcache/cache.py (Cache): Add URL to feedparser.org in docstring.
+
+	* feedcache/__init__.py: Import useful classes directly to the
+	package level.
+
+	* feedcache/test_shelvestorage.py (ShelveStorageTest.testRetrieveExistingData):
+	Ensure that the shelvestorage is saving modified times.
+
+	* feedcache/test_server.py (TestHTTPHandler.do_GET): Include the
+	If-Modified-Since and Last-Modified header handling.
+
+	* feedcache/cache.py (Cache.__getitem__): Only store the newly
+	fetched feed data in the cache storage if the status code is not
+	304 and there was no error.
+
+	* test_server.py (TestHTTPServer): HTTP server for tests.
+	(TestHTTPHandler): HTTP request handler for tests.
+
+	* test_cache.py: Set up the logging before anything else.
+	(CacheServerTest): New tests that work with an HTTP server to
+	check etag handling in the cache.
+
+	* memorystorage.py (MemoryStorage.getModifiedTime): Change getAge
+	to getModifiedTime.
+
+	* cache.py (Cache.__getitem__): Change getAge to getModifiedTime.
+	(Cache): Add debugging.
+
