@@ -55,7 +55,7 @@ def get_newsFeed():
     
     #Time until cached feeds expire
     timeToLiveSeconds=1800   #30 Minutes
-    
+
     #Stores file as .nfeed_cache in CWD
     storage = shelve.open('./cache/nfeed_cache')
     
@@ -115,10 +115,10 @@ class index:
         for x in pkg:
             if x.find('i686') > 0:
                 if len(i686) < 5:
-                    i686.append(cut(x))
+                    i686.append(x.rstrip(' i686'))
             elif x.find('x86_64') > 0:
                 if len(x86_64) < 5:
-                    x86_64.append(cut(x))
+                    x86_64.append(x.rstrip(' x86_64'))
             else:
                 #Huh why are we here what changed?
                 pass
