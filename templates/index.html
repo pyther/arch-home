@@ -64,6 +64,9 @@ $def with (news, i686, x86_64)
                 margin-left: 15px;
                 margin-top: 5px;
             }
+            #cont img {
+                border: 0;
+            }
         </style>
     </head>
     <body>
@@ -77,8 +80,8 @@ $def with (news, i686, x86_64)
             </div>
 	    </div> 
         <div id="cont">
-                <img src="static/logo.png" alt="Logo" /><br />
-                <form method="post" action="/">
+                <a href="http://archlinux.org"><img src="static/logo.png" alt="Logo" /></a><br />
+                <form method="post" action="./">
                     <input type="radio" name="sub" value="1" checked="checked"/>Google &nbsp;&nbsp;
                     <input type="radio" name="sub" value="2"/> Forums &nbsp;&nbsp;
                     <input type="radio" name="sub" value="3"/> Wiki &nbsp;&nbsp;
