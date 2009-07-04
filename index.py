@@ -19,7 +19,7 @@ app = web.application(urls, globals())
 web.template.Template.globals['render'] = render
 
 def cut(x):
-    maxL = 28 #max charcaters before split
+    maxL = 24 #max charcaters before split
   
     p=['','']
     #pkgn = package name
@@ -115,10 +115,10 @@ class index:
         for x in pkg:
             if x.find('i686') > 0:
                 if len(i686) < 5:
-                    i686.append(x.rstrip(' i686'))
+                    i686.append(cut(x))
             elif x.find('x86_64') > 0:
                 if len(x86_64) < 5:
-                    x86_64.append(x.rstrip(' x86_64'))
+                    x86_64.append(cut(x))
             else:
                 #Huh why are we here what changed?
                 pass
