@@ -44,25 +44,29 @@ $def with (news, i686, x86_64)
             }
             #updates {
                 font-family: "DejaVu Sans", "Bitstream Vera Sans", "Lucida Grande", Arial, sans-serif;
-                margin-top: 40px;
-            }
-            #updates table {
+                width: 455px;
                 margin-left: auto;
                 margin-right: auto;
+                margin-top: 40px;
+                /*padding-left: 45px;*/
             }
-            #updates table tr td {
-                vertical-align:text-top;
+            #updates div {
+                float: left;
             }
-            #updates table ul {
+            #updates div ul {
                 background-color: #f0f0f0;
                 list-style-type: none;
-                font-size: 14px;
-                padding-top: 5px;
-                padding-right: 5px;
-                padding-left: 5px;
-                padding-right: 10px;
                 margin-left: 15px;
                 margin-top: 5px;
+                padding: 5px;
+                width: 170px;
+                font-size: 14px;
+            }
+            #i686 {
+                margin-left: 20px;
+            }
+            #x86_64 {
+                margin-left: 40px;
             }
             #cont img {
                 border: 0;
@@ -92,7 +96,7 @@ $def with (news, i686, x86_64)
                     <input type="radio" name="sub" value="1" checked="checked"/>Google &nbsp;&nbsp;
                     <input type="radio" name="sub" value="2"/> <a href="http://bbs.archlinux.org">Forums</a> &nbsp;&nbsp;
                     <input type="radio" name="sub" value="3"/> <a href="http://wiki.archlinux.org">Wiki</a> &nbsp;&nbsp;
-                    <input type="radio" name="sub" value="4"/> <a href="http://wiki.archlinux.org">AUR</a> &nbsp;&nbsp;
+                    <input type="radio" name="sub" value="4"/> <a href="http://aur.archlinux.org">AUR</a> &nbsp;&nbsp;
                     <input type="radio" name="sub" value="5"/> <a href="http://bugs.archlinux.org">Bugs</a>
                     
                     <br /><br />
@@ -102,24 +106,19 @@ $def with (news, i686, x86_64)
         </div>
         <div id="updates">
             <h2>Recent Updates</h2>
-            <table>
-                <tr>
-                    <td style="padding-right: 40px;">
-                        <h3>i686</h3>
-                        <ul>
-                            $for x in i686:
-                                <li title="$x">$x</li>
-                        </ul>
-                    </td>
-                    <td>
-                        <h3>x86_64</h3>
-                        <ul>
-                            $for x in x86_64:
-                                <li title="$x">$x</li> 
-                        </ul>
-                    </td>
-                </tr>
-            </table>
-        </div>
+                <div id="i686">
+                    <h3>i686</h3>
+                    <ul>
+                        $for x in i686:
+                        <li title="$x[1]">$x[0]</li>
+                    </ul>
+                </div>
+                <div id="x86_64">
+                    <h3>x86_64</h3>
+                    <ul>
+                        $for x in x86_64:
+                            <li title="$x[1]">$x[0]</li>
+                    </ul>
+                </div>
     </body>
 </html>
