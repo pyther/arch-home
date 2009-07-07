@@ -105,26 +105,30 @@ class index:
         u = get_pkgFeed()
 
         pkg = [x.title for x in u.entries]
+        purl = [x.link for x in u.entries]
 
         i686 = []
+        i686_url = []
         x86_64 = []
-
+        x86_64_url = []
 
         # This adds the truncated and full package name
         # The i686 or x86_64 gets removed from the package name:
-        for x in pkg:
+        for idx, x in enumerate(pkg):
             if x.find('i686') > 0:
                 if len(i686) < 5:
                     i686.append(cut(x))
+                    i686_url.append(purl[idx])
             elif x.find('x86_64') > 0:
                 if len(x86_64) < 5:
                     x86_64.append(cut(x))
+                    x86_64_url.append(purl[idx])
             else:
                 #Huh why are we here what changed?
                 pass
- 
 
-        return render.index(news, i686, x86_64)
+
+        return render.index(news, i686, i686_url, x86_64, x86_64_url)
 
     #This function will get the search query and process it...
     def POST(self):
