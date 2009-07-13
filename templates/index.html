@@ -114,15 +114,15 @@ $def with (news, i686, x86_64)
                 <div id="i686">
                     <h3>i686</h3>
                     <ul>
-                        $for idx, x in enumerate(i686):
-                        <li title="$x['pkgn']"><a href="$x['url']">$x['s_pkgn']</a></li>
+                        $for x in i686.packages:
+                        <li title="$x['pkgn']"><a href="$x['url']">$x['short_pkgn']</a></li>
                     </ul>
                 </div>
                 <div id="x86_64">
                     <h3>x86_64</h3>
                     <ul>
-                        $for x in x86_64:
-                            <li title="$x['pkgn']"><a href="$x['url']">$x['s_pkgn']</a></li>
+                        $for x in x86_64.packages:
+                            <li title="$x['pkgn']"><a href="$x['url']">$x['short_pkgn']</a></li>
                     </ul>
                 </div>
     </body>

@@ -7,6 +7,8 @@ import feedcache
 import sys
 import shelve
 
+from arch import arch
+
 urls = (
   '/', 'index'
 )
@@ -18,37 +20,6 @@ render = web.template.render('templates')
 app = web.application(urls, globals())
 web.template.Template.globals['render'] = render
 
-def cut(x):
-    maxL = 24 #max charcaters before split
-  
-    p=['','']
-    #pkgn = package name
-    #pkgv = package version
-    #pkgr = package release
-
-    pkgn,pkgv=x.split(' ')[:2]
-    pkgv,pkgr=pkgv.split('-')
-    pkgr='-'+pkgr #addes a dash in front of release number
- 
-    p[1]=pkgn+' '+pkgv+pkgr #Tooltip
-
-    #Remove the release number
-    if len(x) > maxL:
-        p[0]=pkgn+' '+pkgv
-
-        #Remove the pkg version
-        if len(p[0]) > maxL:
-            p[0]=pkgn
-       
-            #In the unsual case that the pkgname is bigger than the allowed max characters
-            #Cut the pkgname
-            if len(p[0]) > maxL:
-                p[0]=p[0][:maxL]
-
-    else:
-        p[0]=pkgn+' '+pkgv+pkgr
-
-    return p
 
 # Gets and stores a cached copy of the news feed
 def get_newsFeed():
@@ -107,27 +78,23 @@ class index:
         pkg = [x.title for x in u.entries]
         purl = [x.link for x in u.entries]
 
-        i686 = []
-        x86_64 = []
+        i686 = arch()
+        x86_64 = arch()
 
         # This adds the truncated and full package name
         # The i686 or x86_64 gets removed from the package name:
         for idx, x in enumerate(pkg):
             if x.find('i686') > 0:
-                if len(i686) < 5:
-                    pkgn=cut(x)[1]
-                    s_pkgn=cut(x)[0]
+                if i686.length() < 5:
                     url=purl[idx]
-                    
-                    i686.append({'pkgn':pkgn, 's_pkgn':s_pkgn, 'url':url})
+                    #print x 
+                    i686.add_package(x, url)
             
             elif x.find('x86_64') > 0:
-                if len(x86_64) < 5:
-                    pkgn=cut(x)[1]
-                    s_pkgn=cut(x)[0]
+                if x86_64.length() < 5:
                     url=purl[idx]
-                    
-                    x86_64.append({'pkgn':pkgn, 's_pkgn':s_pkgn, 'url':url})
+                    #print x
+                    x86_64.add_package(x, url)
                     
             else:
                 #Huh why are we here what changed?

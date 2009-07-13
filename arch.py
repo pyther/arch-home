@@ -49,3 +49,5 @@ class arch:
 
         return
 
+    def length(self):
+        return len(self.packages)
