@@ -1,4 +1,4 @@
-$def with (news, i686, i686_url, x86_64, x86_64_url)
+$def with (news, i686, x86_64)
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> 
@@ -115,14 +115,14 @@ $def with (news, i686, i686_url, x86_64, x86_64_url)
                     <h3>i686</h3>
                     <ul>
                         $for idx, x in enumerate(i686):
-                        <li title="$x[1]"><a href="$i686_url[idx]">$x[0]</a></li>
+                        <li title="$x['pkgn']"><a href="$x['url']">$x['s_pkgn']</a></li>
                     </ul>
                 </div>
                 <div id="x86_64">
                     <h3>x86_64</h3>
                     <ul>
-                        $for idx, x in enumerate(x86_64):
-                            <li title="$x[1]"><a href="$x86_64_url[idx]">$x[0]</a></li>
+                        $for x in x86_64:
+                            <li title="$x['pkgn']"><a href="$x['url']">$x['s_pkgn']</a></li>
                     </ul>
                 </div>
     </body>
