@@ -62,23 +62,15 @@ class index:
         nfeed = get_newsFeed();
 
 
-        # ntitle = title of news feeds
-        ntitle = [x.title for x in nfeed.entries]
-        
-        # nurl = url of news feed
-        nurl = [x.link for x in nfeed.entries]
-        
-        #Stores title and url together into a tuple
-        news = [ntitle, nurl]
+        # Store title and url for news together, only store 4 entries
+        news = [(x.title, x.link) for x in nfeed.entries][:4]      
+ 
         
         # Feed for new packages
         #u = feedparser.parse('http://www.archlinux.org/feeds/packages/')
         u = get_pkgFeed()
 
-        pkgn = [x.title for x in u.entries]
-        purl = [x.link for x in u.entries]
-
-        pkg=zip(pkgn,purl)
+        pkg = [(x.title, x.link) for x in u.entries]
 
         i686 = arch()
         x86_64 = arch()
