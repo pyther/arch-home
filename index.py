@@ -123,11 +123,9 @@ class index:
         
         #Redirect if we have a url
         if url:
-            web.Found(url)
-            return
+            return web.Found(url)
         else:
-            web.badrequest()
-            return "<h1>400 - Bad Request</h1>"
+            return web.badrequest()
 
 if __name__ == "__main__":
     app.run()
