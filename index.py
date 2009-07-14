@@ -75,21 +75,12 @@ class index:
         i686 = arch()
         x86_64 = arch()
 
-        # This adds the truncated and full package name
-        # The i686 or x86_64 gets removed from the package name:
-        for x in pkg:
-            if 'i686' in x[0]:
-                if i686.length() < 5:
-                    i686.add_package(x[0], x[1])
-            
-            elif x[0].find('x86_64') > 0:
-                if x86_64.length() < 5:
-                    x86_64.add_package(x[0], x[1])
-                    
-            else:
-                #Huh why are we here what changed?
-                pass
-
+        #Loop goes though two times... one for i686 and one for x86_64
+        for arch_name, arch_list in ( ('i686', i686), ('x86_64', x86_64) ):
+            #Looking for pkgs with name of i686 or name of x86_64
+            filtered_packages = [p for p in pkg if arch_name in p[0]]
+            for p in filtered_packages[:5]:
+                arch_list.add_package(p[0], p[1])
 
         return render.index(news, i686, x86_64)
 
