@@ -36,7 +36,8 @@ def cut(x):
 class arch:
     "Stores package information for architecture"
         
-    packages=[]
+    def __init__(self):
+        self.packages=[]
 
     def add_package(self, pkgn, url):
         
