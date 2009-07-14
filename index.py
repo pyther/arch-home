@@ -75,26 +75,24 @@ class index:
         #u = feedparser.parse('http://www.archlinux.org/feeds/packages/')
         u = get_pkgFeed()
 
-        pkg = [x.title for x in u.entries]
+        pkgn = [x.title for x in u.entries]
         purl = [x.link for x in u.entries]
+
+        pkg=zip(pkgn,purl)
 
         i686 = arch()
         x86_64 = arch()
 
         # This adds the truncated and full package name
         # The i686 or x86_64 gets removed from the package name:
-        for idx, x in enumerate(pkg):
-            if x.find('i686') > 0:
+        for x in pkg:
+            if 'i686' in x[0]:
                 if i686.length() < 5:
-                    url=purl[idx]
-                    #print x 
-                    i686.add_package(x, url)
+                    i686.add_package(x[0], x[1])
             
-            elif x.find('x86_64') > 0:
+            elif x[0].find('x86_64') > 0:
                 if x86_64.length() < 5:
-                    url=purl[idx]
-                    #print x
-                    x86_64.add_package(x, url)
+                    x86_64.add_package(x[0], x[1])
                     
             else:
                 #Huh why are we here what changed?
