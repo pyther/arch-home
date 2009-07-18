@@ -17,7 +17,7 @@ $def with (news, i686, x86_64)
                 background: #f0f0f0;
                 width: 100%;
                 font-size: 12px;
-                font-family: "Bitstreams Vera Sans", helvetica, arial;
+                font-family: "DejaVu Sans", "Bitstreams Vera Sans", helvetica, arial;
                 padding: 0px;
                 margin: 0px;
                 position: absolute;
@@ -51,7 +51,8 @@ $def with (news, i686, x86_64)
                 /*padding-left: 45px;*/
             }
             #updates div {
-                float: left;
+                /*float: left;*/
+                display: inline-block;
             }
             #updates div ul {
                 background-color: #f0f0f0;
@@ -82,6 +83,16 @@ $def with (news, i686, x86_64)
             }
             #cont a:hover {
                 text-decoration: underline;
+            }
+            #footer {
+                font-family: "DejaVu Sans", "Bitstreams Vera Sans", helvetica, arial;
+                font-size: 12px;
+                padding-top: 2em;
+                text-align: center;
+            }
+            #footer a {
+                color: #0771A6;
+                text-decoration: none;
             }
         </style>
     </head>
@@ -126,5 +137,7 @@ $def with (news, i686, x86_64)
                     </ul>
                 </div>
         </div>
+        <div id="footer">
+            Inspired by the <a href="http://bbs.archlinux.org/viewtopic.php?id=69554&p=1">community</a>. Source at <a href="http://github.com/pyther/arch-home/">github</a></div>
     </body>
 </html>
