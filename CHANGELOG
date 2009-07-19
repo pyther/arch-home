@@ -1,6 +1,22 @@
 CHANGELOG
 
-06/28/09
+07/18/2009
+    -Added footer
+
+07/13/2009
+    -Class (arch) is used to store pkgs for each architecture
+    -Code cleaned up; using list-comprehenssions
+
+07/04/2009
+    -Forum, Wiki, Bugs, AUR all link to arch linux pages respectively
+
+07/03/2009
+    -Arch Logo Links to http://archlinux.org
+    -Form action path is now ./ instead of /; this allows forum search to work regardless of url
+
+v0.1 release --------------------------------------------------------------------------------------
+
+06/28/2009
     -Server now handles search requests (webpy). There is no longer a need for javascript.
     -News bar stays on one line. overflow: hidden is set so the news items will not go into a new line
     -If pkg names are to long they are display either as pkgname-pkgver or pkgname
@@ -10,5 +26,5 @@ CHANGELOG
         *News feed is updated every 30 minutes
 
 
-05/25/09
+05/25/2009
     -Initial Import
