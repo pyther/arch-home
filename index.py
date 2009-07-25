@@ -56,7 +56,7 @@ def get_pkgFeed():
 class index:
     def GET(self):
 
-        web.header('Content-Type','application/xhtml+xml;')
+        web.header('Content-Type','application/xhtml+xml; charset=utf-8')
 
         # Gets the current RSS news feed
         # nfeed = news feed
