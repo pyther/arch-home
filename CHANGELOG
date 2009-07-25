@@ -2,6 +2,7 @@ CHANGELOG
 
 07/25/2009
     -Page now is served as mime type "application/xhtml+xml; charset=utf-8"
+    -Turned off websafe rendering for pkgs and news items.
 
 07/24/2009
     -PKG lists are now top-aligned
