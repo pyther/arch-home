@@ -101,12 +101,12 @@ $def with (news, i686, x86_64)
         $#Links
         <div id="top">
             <div style="padding: 3px; overflow: hidden; height: 13px;">News:
-                <a href="$news[0][1]">$news[0][0]</a>&nbsp;-&nbsp;
-                <a href="$news[1][1]">$news[1][0]</a>&nbsp;-&nbsp; 
-                <a href="$news[2][1]">$news[2][0]</a>&nbsp;-&nbsp;
-                <a href="$news[3][1]">$news[3][0]</a>
+                <a href="$:news[0][1]">$:news[0][0]</a>&nbsp;-&nbsp;
+                <a href="$:news[1][1]">$:news[1][0]</a>&nbsp;-&nbsp; 
+                <a href="$:news[2][1]">$:news[2][0]</a>&nbsp;-&nbsp;
+                <a href="$:news[3][1]">$:news[3][0]</a>
             </div>
-	    </div> 
+	</div> 
         <div id="cont">
                 <a href="http://archlinux.org"><img src="static/logo.png" alt="Logo" /></a><br />
                 <form method="post" action="./">
@@ -127,14 +127,14 @@ $def with (news, i686, x86_64)
                     <h3>i686</h3>
                     <ul>
                         $for x in i686.packages:
-                        <li title="$x['pkgn']"><a href="$x['url']">$x['short_pkgn']</a></li>
+                        <li title="$:x['pkgn']"><a href="$:x['url']">$x['short_pkgn']</a></li>
                     </ul>
                 </div>
                 <div id="x86_64">
                     <h3>x86_64</h3>
                     <ul>
                         $for x in x86_64.packages:
-                            <li title="$x['pkgn']"><a href="$x['url']">$x['short_pkgn']</a></li>
+                            <li title="$:x['pkgn']"><a href="$:x['url']">$x['short_pkgn']</a></li>
                     </ul>
                 </div>
         </div>
