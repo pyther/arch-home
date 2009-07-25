@@ -42,6 +42,7 @@ Bugs/Feature Requests:
 Notes:
     *PKG version or revision might be removed to make the pkg fit on one line
     *The rss feed is cached: (15 min - pkgs), (60 min - news)
+    *Will not work with IE, because IE does not support mimetype application/xhtml+xml
 
 TODO:
     *Add booleans to turn feature on and off
