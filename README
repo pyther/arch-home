@@ -8,7 +8,8 @@ Features
 
     * News Headlines
     * Latest Packages
-    * Google, Arch Forums, Wiki, and Aur Search
+    * Google Search
+    * Arch Search (Forums, Wiki, AUR, and Bugs)
     * Arch Logo
 
 Dependencies:
@@ -27,17 +28,20 @@ Download:
 
 How to use:
 
-    -Configure webserver to use this webpy script. (See webpy site for instructions)
-    -Execute ./index.py  (Use this only for personal usage, do not publish on the web!) 
+    Configure webserver to use this webpy script. (See webpy site for instructions)
+    
+        or...
+        
+    Execute ./index.py  (Use this only for personal usage, do not publish on the web!) 
 
 
 Bugs/Feature Requests:
     Please submit all bugs and feature requests here: http://github.com/pyther/arch-home/issues
 
 
-Things to Know:
-    *If the package name is longer than 28 characters it will be truncated. However if you hover over the package a tooltip will appear with the full name.
-    *The rss feed is cached: 15 min - pkgs, 30 min - news (Can be modified in index.py)
+Notes:
+    *PKG version or revision might be removed to make the pkg fit on one line
+    *The rss feed is cached: (15 min - pkgs), (60 min - news)
 
 TODO:
     *Add booleans to turn feature on and off

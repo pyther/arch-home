@@ -25,7 +25,7 @@ web.template.Template.globals['render'] = render
 def get_newsFeed():
     
     #Time until cached feeds expire
-    timeToLiveSeconds=1800   #30 Minutes
+    timeToLiveSeconds=3600   #60 Minutes
 
     #Stores file as .nfeed_cache in CWD
     storage = shelve.open('./cache/nfeed_cache')
