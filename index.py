@@ -113,4 +113,6 @@ class index:
             return web.badrequest()
 
 if __name__ == "__main__":
+    #Tells apache we want the script to act as a fastcgi server
+    web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
     app.run()
