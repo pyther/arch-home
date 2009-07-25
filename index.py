@@ -56,6 +56,8 @@ def get_pkgFeed():
 class index:
     def GET(self):
 
+        web.header('Content-Type','application/xhtml+xml;')
+
         # Gets the current RSS news feed
         # nfeed = news feed
         #nfeed = feedparser.parse('http://www.archlinux.org/feeds/news/')
