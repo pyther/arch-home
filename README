@@ -28,7 +28,7 @@ Download:
 
 How to use:
 
-    Configure webserver to use this webpy script. (See webpy site for instructions)
+    Configure webserver to use this webpy script. (See Example_Server_Config)
     
         or...
         
