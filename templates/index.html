@@ -5,25 +5,18 @@ $def with (news, i686, x86_64)
     <head>
         <title>Home Page</title>
         <style type="text/css">
-            #cont{
-                width: 750px;
-                margin: 0 auto;
-                padding-top: 25px;
-                text-align: center;
-                font-family: helvetica, arial;
-				font-size: 12px;
-            }
             #top{
                 background: #f0f0f0;
-                width: 100%;
-                font-size: 12px;
+                font-size: 0.8em;
                 font-family: "DejaVu Sans", "Bitstreams Vera Sans", helvetica, arial;
-                padding: 0px;
+                padding: 0.18em;
                 margin: 0px;
                 position: absolute;
                 top: 0;
                 left: 0;
                 right: 0;
+                white-space: nowrap;
+                overflow: hidden;
             }
             #top a {
                 color: #0771a6;
@@ -32,48 +25,13 @@ $def with (news, i686, x86_64)
             #top a:hover {
                 text-decoration: underline;
             }
-            h2 {
-                font-size: 16px;
+            #cont{
+                width: 750px;
+                margin: 0 auto;
+                padding-top: 1em;
                 text-align: center;
-                color: #0771a6;
-                font-variant: small-caps;
-            }
-            h3 {
-                font-size: 14px;
-                margin-bottom: 0px;
-            }
-            #updates {
-                font-family: "DejaVu Sans", "Bitstream Vera Sans", "Lucida Grande", Arial, sans-serif;
-                width: 460px;
-                margin-left: auto;
-                margin-right: auto;
-                margin-top: 40px;
-                /*padding-left: 45px;*/
-            }
-            #updates div {
-                /*float: left;*/
-                display: inline-block;
-                vertical-align: top;
-            }
-            #updates div ul {
-                background-color: #f0f0f0;
-                list-style-type: none;
-                margin-left: 15px;
-                margin-top: 5px;
-                padding: 5px;
-                width: 170px;
-                font-size: 14px;
-            }
-            #updates a {
-                color: #000;
-                text-decoration: none;
-                /*cursor: text;*/
-            }
-            #i686 {
-                margin-left: 20px;
-            }
-            #x86_64 {
-                margin-left: 40px;
+                font-family: helvetica, arial;
+		font-size: 0.78em;
             }
             #cont img {
                 border: 0;
@@ -85,9 +43,54 @@ $def with (news, i686, x86_64)
             #cont a:hover {
                 text-decoration: underline;
             }
+            h2 {
+                font-size: 1em;
+                text-align: center;
+                color: #0771a6;
+                font-variant: small-caps;
+            }
+            h3 {
+                font-size: 0.9em;
+                margin-bottom: 0px;
+                text-align: center;
+            }
+            #updates {
+                font-family: "DejaVu Sans", "Bitstream Vera Sans", "Lucida Grande", Arial, sans-serif;
+                width: 26.2em;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 2.5em;
+            }
+            #updates div {
+                display: inline-block;
+                vertical-align: top;
+            }
+            #updates div ul {
+                background-color: #f0f0f0;
+                list-style-type: none;
+                /*margin-left: 0.7em;*/
+                margin-top: 0em;
+                padding: 0.4em;
+                width: 12em;
+                font-size: 0.9em;
+                overflow: hidden;
+                white-space: nowrap;
+                border: gray 1px solid;
+                /*text-align: center;*/
+            }
+            #updates a {
+                color: #000;
+                text-decoration: none;
+            }
+            #i686 {
+                margin-left: 0em;
+            }
+            #x86_64 {
+                margin-left: 2.5em;
+            }
             #footer {
                 font-family: "DejaVu Sans", "Bitstreams Vera Sans", helvetica, arial;
-                font-size: 12px;
+                font-size: 0.8em;
                 padding-top: 2em;
                 text-align: center;
             }
@@ -100,12 +103,11 @@ $def with (news, i686, x86_64)
     <body>
         $#Links
         <div id="top">
-            <div style="padding: 3px; overflow: hidden; height: 13px;">News:
-                <a href="$:news[0][1]">$:news[0][0]</a>&nbsp;-&nbsp;
-                <a href="$:news[1][1]">$:news[1][0]</a>&nbsp;-&nbsp; 
-                <a href="$:news[2][1]">$:news[2][0]</a>&nbsp;-&nbsp;
-                <a href="$:news[3][1]">$:news[3][0]</a>
-            </div>
+            News:
+            <a href="$:news[0][1]">$:news[0][0]</a>&nbsp;-&nbsp;
+            <a href="$:news[1][1]">$:news[1][0]</a>&nbsp;-&nbsp; 
+            <a href="$:news[2][1]">$:news[2][0]</a>&nbsp;-&nbsp;
+            <a href="$:news[3][1]">$:news[3][0]</a>
 	</div> 
         <div id="cont">
                 <a href="http://archlinux.org"><img src="static/logo.png" alt="Logo" /></a><br />
@@ -139,6 +141,6 @@ $def with (news, i686, x86_64)
                 </div>
         </div>
         <div id="footer">
-            Inspired by the <a href="http://bbs.archlinux.org/viewtopic.php?id=69554&amp;p=1">community</a>. Source at <a href="http://github.com/pyther/arch-home/">github</a></div>
+            Inspired by the <a href="http://bbs.archlinux.org/viewtopic.php?id=69554&amp;p=1">Arch Linux Community</a>. Source at <a href="http://github.com/pyther/arch-home/">github</a></div>
     </body>
 </html>
