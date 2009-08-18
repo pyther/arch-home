@@ -100,7 +100,7 @@ $def with (news, i686, x86_64)
             }
         </style>
     </head>
-    <body >
+    <body onload="document.forms['f'].elements['q'].focus();">
         $#Links
         <div id="top">
             News:
@@ -111,7 +111,7 @@ $def with (news, i686, x86_64)
 	</div> 
         <div id="cont">
                 <a href="http://archlinux.org"><img src="static/logo.png" alt="Logo" /></a><br />
-                <form name="f" method="post" action="./" >
+                <form name="f" method="post" action="./">
                     <input type="radio" name="sub" value="1" checked="checked"/><a href="http://google.com">Google</a> &nbsp;&nbsp;
                     <input type="radio" name="sub" value="2"/> <a href="http://bbs.archlinux.org">Forums</a> &nbsp;&nbsp;
                     <input type="radio" name="sub" value="3"/> <a href="http://wiki.archlinux.org">Wiki</a> &nbsp;&nbsp;
@@ -124,9 +124,9 @@ $def with (news, i686, x86_64)
                 </form>
         </div>
     
-        <script type="text/javascript" language="javascript">
+        <!--<script type="text/javascript" language="javascript">
             document.forms['f'].elements['q'].focus();
-        </script>
+        </script>-->
         <div id="updates">
             <h2>Recent Updates</h2>
                 <div id="i686">
