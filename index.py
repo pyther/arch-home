@@ -74,13 +74,15 @@ class index:
 
         pkg = [(x.title, x.link) for x in u.entries]
 
+        print pkg
+
         i686 = arch()
         x86_64 = arch()
 
         #Loop goes though two times... one for i686 and one for x86_64
         for arch_name, arch_list in ( ('i686', i686), ('x86_64', x86_64) ):
             #Looking for pkgs with name of i686 or name of x86_64
-            filtered_packages = [p for p in pkg if arch_name in p[0]]
+            filtered_packages = [p for p in pkg if (arch_name in p[0] or 'any' in p[0]) ]
             for p in filtered_packages[:5]:
                 arch_list.add_package(p[0], p[1])
 
@@ -114,5 +116,5 @@ class index:
 
 if __name__ == "__main__":
     #Tells apache we want the script to act as a fastcgi server
-    web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
+    #web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
     app.run()
