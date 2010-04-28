@@ -37,10 +37,10 @@ class Arch:
 
     def add_package(self, pkgname, pkgver, pkgurl, pkgrepo):
 
-        p = cut(pkgname, pkgver)
+        pkg_name, pkg_name_short = cut(pkgname, pkgver)
 
-        pkg_name = p[0]
-        pkg_name_short = p[1]
+        pkg_name=pkg_name.encode('ascii', 'replace')
+        pkg_name_short=pkg_name_short.encode('ascii', 'replace')
 
         self.packages.append({'pkgname':pkg_name, 'short_pkgname':pkg_name_short, 'pkgurl':pkgurl})
 
