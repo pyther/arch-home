@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
 import web
+
+import urllib
+from BeautifulSoup import BeautifulSoup
+
 import feedparser
 import feedcache
 
@@ -20,71 +24,80 @@ render = web.template.render('templates')
 app = web.application(urls, globals())
 web.template.Template.globals['render'] = render
 
-
-# Gets and stores a cached copy of the news feed
+#Downloads RSS for news feed items
 def get_newsFeed():
-    
+
     #Time until cached feeds expire
     timeToLiveSeconds=3600   #60 Minutes
 
     #Stores file as .nfeed_cache in CWD
     storage = shelve.open('./cache/nfeed_cache')
-    
+
     fc = feedcache.Cache(storage)
-    
+
     #Fetches the feed from cache or from the website
     nfeed = fc.fetch('http://www.archlinux.org/feeds/news/')
-    
+
     #Closes feed
     storage.close()
-    
+
     return nfeed
 
-def get_pkgFeed():
-   
-    #Time until cached feeds expire
-    timeToLiveSeconds=900   #15 Minutes
+#Downloads latest package listing from website
+def getData():
+    url="http://www.archlinux.org/packages/?sort=-last_update"
+    try:
+        data=urllib.urlopen(url)
+    except IOError:
+        data=''
 
-    storage=shelve.open('./cache/pkgfeed_cache')
-    fc = feedcache.Cache(storage)
+    return data
 
-    pkgs = fc.fetch('http://www.archlinux.org/feeds/packages/')
-    storage.close()
-
-    return pkgs
 
 class index:
     def GET(self):
 
-        web.header('Content-Type','application/xhtml+xml; charset=utf-8')
-
-        # Gets the current RSS news feed
-        # nfeed = news feed
-        #nfeed = feedparser.parse('http://www.archlinux.org/feeds/news/')
-        nfeed = get_newsFeed();
-
+        #web.header('Content-Type','application/xhtml+xml; charset=utf-8')
 
         # Store title and url for news together, only store 4 entries
+        nfeed = get_newsFeed();
         news = [(x.title, x.link) for x in nfeed.entries][:4]      
- 
         
-        # Feed for new packages
-        #u = feedparser.parse('http://www.archlinux.org/feeds/packages/')
-        u = get_pkgFeed()
+        # Fetches Newest Pkgs
+        data=getData()
 
-        pkg = [(x.title, x.link) for x in u.entries]
+        if not data:
+            error=true
+        
+        bs = BeautifulSoup(data)
+        pkgs=bs.find('table', {"class" : "results"})
+        pkgs=pkgs.findAll('tr', {"class": ["pkgr1","pkgr2"]})
 
-        print pkg
+        pkgname=[]
+        pkgver=[]
+        pkgarch=[]
+        pkgrepo=[]
+        pkgurl=[]
 
-        i686 = arch()
-        x86_64 = arch()
+        for x in range(len(pkgs)):
+            # 0 - Arch         1 - Repo
+            # 2 - URL          3 - Version
+            # 4 - Description  5 - Date
+            pkg=pkgs[x].findAll('td')
+            
+            arch=pkg[0].contents
+            #repo=str(pkg[1].contents)
 
-        #Loop goes though two times... one for i686 and one for x86_64
-        for arch_name, arch_list in ( ('i686', i686), ('x86_64', x86_64) ):
-            #Looking for pkgs with name of i686 or name of x86_64
-            filtered_packages = [p for p in pkg if (arch_name in p[0] or 'any' in p[0]) ]
-            for p in filtered_packages[:5]:
-                arch_list.add_package(p[0], p[1])
+        #pkglist=zip(pkgarch, pkgrepo, pkgname, pkgurl, pkgver)        
+        
+        i686=arch()
+        x86_64=arch()
+
+        #Loop runs twice, once for i686 and once for x86_64
+        #for arch_name, arch_list in ( ('i686', i686), ('x86_64', x86_64) ):
+        #    filtered_packages = [pkg for pkg in pkglist if (arch_name in pkg[2] or 'any' in pkg[2]) ]
+        #    for pkg in filtered_packages[:5]:
+        #        arch_list.add_package(pkg[2],pkg[3])
 
         return render.index(news, i686, x86_64)
 
