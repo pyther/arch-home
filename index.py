@@ -11,7 +11,7 @@ import feedcache
 import sys
 import shelve
 
-from arch import arch
+from arch import Arch
 
 urls = (
   '/', 'index'
@@ -85,19 +85,34 @@ class index:
             # 4 - Description  5 - Date
             pkg=pkgs[x].findAll('td')
             
-            arch=pkg[0].contents
-            #repo=str(pkg[1].contents)
+            arch=str(pkg[0].contents)
+            repo=str(pkg[1].contents)
+            name=str(pkg[2].a.contents)
+            url='http://archlinux.org'+str(pkg[2].contents).split('"')[1]
+            version=str(pkg[3].contents)
+            desc=str(pkg[4].contents)
+            date=str(pkg[5].contents)
 
-        #pkglist=zip(pkgarch, pkgrepo, pkgname, pkgurl, pkgver)        
+            pkgarch.append(arch)
+            pkgrepo.append(repo)
+            pkgname.append(name)
+            pkgurl.append(url)
+            pkgver.append(version)
+
+
+        pkglist=zip(pkgarch, pkgrepo, pkgname, pkgurl, pkgver)        
         
-        i686=arch()
-        x86_64=arch()
+        i686=Arch()
+        x86_64=Arch()
 
         #Loop runs twice, once for i686 and once for x86_64
-        #for arch_name, arch_list in ( ('i686', i686), ('x86_64', x86_64) ):
-        #    filtered_packages = [pkg for pkg in pkglist if (arch_name in pkg[2] or 'any' in pkg[2]) ]
-        #    for pkg in filtered_packages[:5]:
-        #        arch_list.add_package(pkg[2],pkg[3])
+        for arch_name, arch_list in ( ('i686', i686), ('x86_64', x86_64) ):
+            filtered_packages = [pkg for pkg in pkglist if (arch_name in pkg[0] or 'any' in pkg[0]) ]
+
+            #print filtered_packages
+            for pkg in filtered_packages[:5]:
+                #Name, Version, URL, Repo
+                arch_list.add_package(pkg[2],pkg[4],pkg[3],pkg[1])
 
         return render.index(news, i686, x86_64)
 

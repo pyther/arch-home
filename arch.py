@@ -1,52 +1,48 @@
 #!/usr/bin/env python
 
 
-def cut(x):
+def cut(pkgname,pkgver):
     maxL = 24 #max charcaters before split
-  
-    p=['','']
-    #pkgn = package name
-    #pkgv = package version
-    #pkgr = package release
 
-    pkgn,pkgv=x.split(' ')[:2]
-    pkgv,pkgr=pkgv.split('-')
-    pkgr='-'+pkgr #addes a dash in front of release number
- 
-    p[0]=pkgn+' '+pkgv+pkgr #Tooltip
+    p=['','']
+
+    pkgver,pkgrel=pkgver.split('-')
+    pkgrel='-'+pkgrel #addes a dash in front of release number
+
+    p[0]=pkgname+' '+pkgver+pkgrel #Tooltip
 
     #Remove the release number
-    if len(x) > maxL:
-        p[1]=pkgn+' '+pkgv
+    if len(pkgname) > maxL:
+        p[1]=pkgname+' '+pkgver
 
         #Remove the pkg version
         if len(p[1]) > maxL:
-            p[1]=pkgn
-       
+            p[1]=pkgname
+
             #In the unsual case that the pkgname is bigger than the allowed max characters
             #Cut the pkgname
             if len(p[1]) > maxL:
                 p[0]=p[1][:maxL]
 
     else:
-        p[1]=pkgn+' '+pkgv+pkgr
+        p[1]=pkgname+' '+pkgver+pkgrel
 
     return p
 
-class arch:
+class Arch:
     "Stores package information for architecture"
-        
+
     def __init__(self):
         self.packages=[]
 
-    def add_package(self, pkgn, url):
-        
-        p = cut(pkgn)
+    def add_package(self, pkgname, pkgver, pkgurl, pkgrepo):
+
+        p = cut(pkgname, pkgver)
 
         pkg_name = p[0]
         pkg_name_short = p[1]
-        
-        self.packages.append({'pkgn':pkg_name, 'short_pkgn':pkg_name_short, 'url':url})
+
+        self.packages.append({'pkgname':pkg_name, 'short_pkgname':pkg_name_short, 'pkgurl':pkgurl})
 
         return
 
