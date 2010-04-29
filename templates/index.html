@@ -134,14 +134,20 @@ $def with (news, i686, x86_64)
                     <h3>i686</h3>
                     <ul>
                         $for x in i686.packages:
-                        <li title="$x['pkgname']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
+                            $if x['pkgrepo']=="Testing":
+                                <li style="font-style: italic;" title="$x['pkgname'] - $x['pkgdesc']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
+                            $else:
+                                <li title="$x['pkgname'] - $x['pkgdesc']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
                     </ul>
                 </div>
                 <div id="x86_64">
                     <h3>x86_64</h3>
                     <ul>
                         $for x in x86_64.packages:
-                            <li title="$x['pkgname']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
+                            $if x['pkgrepo']=="Testing":
+                                <li style="font-style: italic;" title="$x['pkgname'] - $x['pkgdesc']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
+                            $else:
+                                <li title="$x['pkgname'] - $x['pkgdesc']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
                     </ul>
                 </div>
         </div>

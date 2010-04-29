@@ -35,11 +35,11 @@ class Arch:
     def __init__(self):
         self.packages=[]
 
-    def add_package(self, pkgname, pkgver, pkgurl, pkgrepo):
+    def add_package(self, pkgname, pkgver, pkgurl, pkgrepo, pkgdesc):
 
         pkg_name, pkg_name_short = cut(pkgname, pkgver)
 
-        self.packages.append({'pkgname':pkg_name, 'short_pkgname':pkg_name_short, 'pkgurl':pkgurl})
+        self.packages.append({'pkgname':pkg_name, 'short_pkgname':pkg_name_short, 'pkgurl':pkgurl, 'pkgrepo':pkgrepo, "pkgdesc":pkgdesc})
 
         return
 
