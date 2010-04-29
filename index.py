@@ -121,7 +121,7 @@ class index:
         if os.path.isfile(pklFile):
             pkgCache = open(pklFile, 'rb')
             timestamp=pickle.load(pkgCache)
-            expiredtimestamp=timestamp+datetime.timedelta(seconds=3600) #Take current timestamp and increase it by an hour
+            expiredtimestamp=timestamp+datetime.timedelta(seconds=3600) #Take timestamp and increase it by an hour
 
             # Is the current time an hour greater than orginal timestamp
             if datetime.datetime.now() > expiredtimestamp:
