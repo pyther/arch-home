@@ -11,6 +11,10 @@ import feedcache
 import sys
 import shelve
 
+import pickle
+import os.path
+from datetime import datetime
+
 from arch import Arch
 
 urls = (
@@ -23,7 +27,6 @@ render = web.template.render('templates')
 
 app = web.application(urls, globals())
 web.template.Template.globals['render'] = render
-web.template.Template.globals['unicode'] = unicode
 
 #Downloads RSS for news feed items
 def get_newsFeed():
@@ -55,6 +58,54 @@ def getData():
     return data
 
 
+def filterPackages(data):
+    bs = BeautifulSoup(data)
+    pkgs=bs.find('table', {"class" : "results"})
+    pkgs=pkgs.findAll('tr', {"class": ["pkgr1","pkgr2"]})
+
+    pkgname=[]
+    pkgver=[]
+    pkgarch=[]
+    pkgrepo=[]
+    pkgurl=[]
+
+    for x in range(len(pkgs)):
+        # 0 - Arch         1 - Repo
+        # 2 - URL          3 - Version
+        # 4 - Description  5 - Date
+        pkg=pkgs[x].findAll('td')
+        
+        arch=str(pkg[0].contents[0])
+        repo=str(pkg[1].contents[0])
+        name=str(pkg[2].a.contents[0])
+        url='http://archlinux.org'+str(pkg[2].contents).split('"')[1]
+        version=str(pkg[3].contents[0])
+        desc=str(pkg[4].contents[0])
+        date=str(pkg[5].contents[0])
+
+        pkgarch.append(arch)
+        pkgrepo.append(repo)
+        pkgname.append(name)
+        pkgurl.append(url)
+        pkgver.append(version)
+
+
+    pkglist=zip(pkgarch, pkgrepo, pkgname, pkgurl, pkgver)        
+    
+    i686=Arch()
+    x86_64=Arch()
+
+    #Loop runs twice, once for i686 and once for x86_64
+    for arch_name, arch_list in ( ('i686', i686), ('x86_64', x86_64) ):
+        filtered_packages = [pkg for pkg in pkglist if (arch_name in pkg[0] or 'any' in pkg[0]) ]
+
+        #print filtered_packages
+        for pkg in filtered_packages[:5]:
+            #Name, Version, URL, Repo
+            arch_list.add_package(pkg[2],pkg[4],pkg[3],pkg[1])
+    return (i686, x86_64) 
+
+
 class index:
     def GET(self):
 
@@ -64,56 +115,26 @@ class index:
         nfeed = get_newsFeed();
         news = [(x.title, x.link) for x in nfeed.entries][:4]      
         
-        # Fetches Newest Pkgs
-        data=getData()
-
-        if not data:
-            error=true
-        
-        bs = BeautifulSoup(data)
-        pkgs=bs.find('table', {"class" : "results"})
-        pkgs=pkgs.findAll('tr', {"class": ["pkgr1","pkgr2"]})
-
-        pkgname=[]
-        pkgver=[]
-        pkgarch=[]
-        pkgrepo=[]
-        pkgurl=[]
-
-        for x in range(len(pkgs)):
-            # 0 - Arch         1 - Repo
-            # 2 - URL          3 - Version
-            # 4 - Description  5 - Date
-            pkg=pkgs[x].findAll('td')
-            
-            arch=str(pkg[0].contents[0])
-            repo=str(pkg[1].contents[0])
-            name=str(pkg[2].a.contents[0])
-            url='http://archlinux.org'+str(pkg[2].contents).split('"')[1]
-            version=str(pkg[3].contents[0])
-            desc=str(pkg[4].contents[0])
-            date=str(pkg[5].contents[0])
- 
-            pkgarch.append(arch)
-            pkgrepo.append(repo)
-            pkgname.append(name)
-            pkgurl.append(url)
-            pkgver.append(version)
-
-
-        pkglist=zip(pkgarch, pkgrepo, pkgname, pkgurl, pkgver)        
-        
-        i686=Arch()
-        x86_64=Arch()
-
-        #Loop runs twice, once for i686 and once for x86_64
-        for arch_name, arch_list in ( ('i686', i686), ('x86_64', x86_64) ):
-            filtered_packages = [pkg for pkg in pkglist if (arch_name in pkg[0] or 'any' in pkg[0]) ]
-
-            #print filtered_packages
-            for pkg in filtered_packages[:5]:
-                #Name, Version, URL, Repo
-                arch_list.add_package(pkg[2],pkg[4],pkg[3],pkg[1])
+        pklFile='./cache/pkgdata.pkl'
+        if os.path.isfile(pklFile):
+            pkgCache = open(pklFile, 'rb')
+            timestamp=pickle.load(pkgCache)
+            i686=pickle.load(pkgCache)
+            x86_64=pickle.load(pkgCache)
+            pkgCache.close()
+        else:
+            #Fetches Website
+            data=getData()
+            if data:
+                i686, x86_64 = filterPackages(data)
+                pkgCache = open(pklFile, 'wb')
+                pickle.dump(datetime.now(), pkgCache)
+                pickle.dump(i686, pkgCache)
+                pickle.dump(x86_64, pkgCache)
+                pkgCache.close()
+            else:
+                i686=Arch()
+                x86_64=Arch()
 
         return render.index(news, i686, x86_64)
 
