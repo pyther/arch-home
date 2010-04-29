@@ -23,6 +23,7 @@ render = web.template.render('templates')
 
 app = web.application(urls, globals())
 web.template.Template.globals['render'] = render
+web.template.Template.globals['unicode'] = unicode
 
 #Downloads RSS for news feed items
 def get_newsFeed():
@@ -85,14 +86,14 @@ class index:
             # 4 - Description  5 - Date
             pkg=pkgs[x].findAll('td')
             
-            arch=str(pkg[0].contents)
-            repo=str(pkg[1].contents)
-            name=str(pkg[2].a.contents)
+            arch=str(pkg[0].contents[0])
+            repo=str(pkg[1].contents[0])
+            name=str(pkg[2].a.contents[0])
             url='http://archlinux.org'+str(pkg[2].contents).split('"')[1]
-            version=str(pkg[3].contents)
-            desc=str(pkg[4].contents)
-            date=str(pkg[5].contents)
-
+            version=str(pkg[3].contents[0])
+            desc=str(pkg[4].contents[0])
+            date=str(pkg[5].contents[0])
+ 
             pkgarch.append(arch)
             pkgrepo.append(repo)
             pkgname.append(name)

@@ -1,4 +1,5 @@
 $def with (news, i686, x86_64)
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> 
@@ -31,7 +32,7 @@ $def with (news, i686, x86_64)
                 padding-top: 1em;
                 text-align: center;
                 font-family: helvetica, arial;
-		font-size: 0.78em;
+		        font-size: 0.78em;
             }
             #cont img {
                 border: 0;
@@ -124,7 +125,6 @@ $def with (news, i686, x86_64)
                     <input id="q" name="q" type="text" size="40" /><input id="search_btn" type="submit" value="Search" />
                 </form>
         </div>
-    
         <!--<script type="text/javascript" language="javascript">
             document.forms['f'].elements['q'].focus();
         </script>-->
@@ -134,14 +134,14 @@ $def with (news, i686, x86_64)
                     <h3>i686</h3>
                     <ul>
                         $for x in i686.packages:
-                        <li title="$x['pkgname']"><a href="$:x['pkgurl']">$x['short_pkgname']</a></li>
+                        <li title="$x['pkgname']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
                     </ul>
                 </div>
                 <div id="x86_64">
                     <h3>x86_64</h3>
                     <ul>
                         $for x in x86_64.packages:
-                            <li title="$x['pkgname']"><a href="$:x['pkgurl']">$x['short_pkgname']</a></li>
+                            <li title="$x['pkgname']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
                     </ul>
                 </div>
         </div>

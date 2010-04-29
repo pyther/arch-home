@@ -39,9 +39,6 @@ class Arch:
 
         pkg_name, pkg_name_short = cut(pkgname, pkgver)
 
-        pkg_name=pkg_name.encode('ascii', 'replace')
-        pkg_name_short=pkg_name_short.encode('ascii', 'replace')
-
         self.packages.append({'pkgname':pkg_name, 'short_pkgname':pkg_name_short, 'pkgurl':pkgurl})
 
         return
