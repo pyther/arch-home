@@ -11,6 +11,7 @@ Features
     * Google Search
     * Arch Search (Forums, Wiki, AUR, and Bugs)
     * Arch Logo
+    * Testing Packages in Italics
 
 Link:
     http://home.archlinux.ca - Big Thanks to Dusty for hosting this!
@@ -19,8 +20,9 @@ Dependencies:
 
     * Python 2.6
     * python-feedparser 4.1 - http://www.feedparser.org/
-    * webpy 3.0 - http://webpy.org/
     * feedcache 1.3.1 - http://www.doughellmann.com/projects/feedcache/
+    * BeautifulSoup
+    * webpy 3.0 - http://webpy.org/
     * python-flup 1.0.1 (really a webpy depend)
 
 
@@ -44,10 +46,9 @@ Bugs/Feature Requests:
 
 Notes:
     *PKG version or revision might be removed to make the pkg fit on one line
-    *The rss feed is cached: (15 min - pkgs), (60 min - news)
+    *News and Package lists are fetched every 60 minutes
     *Will not work with IE, because IE does not support mimetype application/xhtml+xml
 
 TODO:
-    *Add booleans to turn feature on and off
-    *Add aur spot light as seen here: http://arch-start.appspot.com/
+    *Allow user to exclude testing and community packages
      

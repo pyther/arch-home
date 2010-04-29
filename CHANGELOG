@@ -1,5 +1,11 @@
 CHANGELOG
 
+04/28/2010
+    -Packages are fetched from http://www.archlinux.org/packages/?sort=-last_update
+    -Packages are cached for 60 minutes
+    -Testing and Community Testing Packages are in italics
+    -Link Tooltips now include the package description
+
 07/25/2009
     -Various CSS tweaks
     -CSS uses ems instead of pxs, this should allow the page to work well on various resolutions
