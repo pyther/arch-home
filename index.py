@@ -11,7 +11,7 @@ import feedcache
 import sys
 import shelve
 
-import pickle
+import cPickle as pickle
 import os.path
 import datetime
 
@@ -120,17 +120,24 @@ class index:
         pklFile='./cache/pkgdata.pkl'
         if os.path.isfile(pklFile):
             pkgCache = open(pklFile, 'rb')
-            timestamp=pickle.load(pkgCache)
-            expiredtimestamp=timestamp+datetime.timedelta(seconds=3600) #Take timestamp and increase it by an hour
-
-            # Is the current time an hour greater than orginal timestamp
-            if datetime.datetime.now() > expiredtimestamp:
-                getDataWrite=True
-            else:
-                getDataWrite=False
+            # Try to load variable from pickle file
+            # If the loading fails then getDataWrite gets set to True   
+            # Resulting in the pickle file being overwritten 
+            try:
+                timestamp=pickle.load(pkgCache)
                 i686=pickle.load(pkgCache)
                 x86_64=pickle.load(pkgCache)
-            pkgCache.close()
+            except EOFError:
+                getDataWrite=True
+            else:
+                expiredtimestamp=timestamp+datetime.timedelta(seconds=3600) #Take timestamp and increase it by an hour
+
+                # Is the current time an hour greater than orginal timestamp
+                if datetime.datetime.now() > expiredtimestamp:
+                    getDataWrite=True
+                else:
+                    getDataWrite=False
+                pkgCache.close()
         else:
             getDataWrite=True
         
@@ -140,7 +147,7 @@ class index:
             if data:
                 i686, x86_64 = filterPackages(data)
                 pkgCache = open(pklFile, 'wb')
-                pickle.dump(datetime.now(), pkgCache)
+                pickle.dump(datetime.datetime.now(), pkgCache)
                 pickle.dump(i686, pkgCache)
                 pickle.dump(x86_64, pkgCache)
                 pkgCache.close()
