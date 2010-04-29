@@ -134,7 +134,7 @@ $def with (news, i686, x86_64)
                     <h3>i686</h3>
                     <ul>
                         $for x in i686.packages:
-                            $if x['pkgrepo']=="Testing":
+                            $if x['pkgrepo']=="Testing" or x['pkgrepo']=="Community-Testing":
                                 <li style="font-style: italic;" title="$x['pkgname'] - $x['pkgdesc']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
                             $else:
                                 <li title="$x['pkgname'] - $x['pkgdesc']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
@@ -144,7 +144,7 @@ $def with (news, i686, x86_64)
                     <h3>x86_64</h3>
                     <ul>
                         $for x in x86_64.packages:
-                            $if x['pkgrepo']=="Testing":
+                            $if x['pkgrepo']=="Testing" or x['pkgrepo']=="Community-Testing":
                                 <li style="font-style: italic;" title="$x['pkgname'] - $x['pkgdesc']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
                             $else:
                                 <li title="$x['pkgname'] - $x['pkgdesc']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
