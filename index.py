@@ -13,7 +13,7 @@ import shelve
 
 import pickle
 import os.path
-from datetime import datetime
+import datetime
 
 from arch import Arch
 
@@ -68,6 +68,7 @@ def filterPackages(data):
     pkgarch=[]
     pkgrepo=[]
     pkgurl=[]
+    pkgdesc=[]
 
     for x in range(len(pkgs)):
         # 0 - Arch         1 - Repo
@@ -88,9 +89,10 @@ def filterPackages(data):
         pkgname.append(name)
         pkgurl.append(url)
         pkgver.append(version)
+        pkgdesc.append(desc)
 
 
-    pkglist=zip(pkgarch, pkgrepo, pkgname, pkgurl, pkgver)        
+    pkglist=zip(pkgarch, pkgrepo, pkgname, pkgurl, pkgver, pkgdesc)        
     
     i686=Arch()
     x86_64=Arch()
@@ -102,7 +104,7 @@ def filterPackages(data):
         #print filtered_packages
         for pkg in filtered_packages[:5]:
             #Name, Version, URL, Repo
-            arch_list.add_package(pkg[2],pkg[4],pkg[3],pkg[1])
+            arch_list.add_package(pkg[2],pkg[4],pkg[3],pkg[1],pkg[5])
     return (i686, x86_64) 
 
 
@@ -119,10 +121,20 @@ class index:
         if os.path.isfile(pklFile):
             pkgCache = open(pklFile, 'rb')
             timestamp=pickle.load(pkgCache)
-            i686=pickle.load(pkgCache)
-            x86_64=pickle.load(pkgCache)
+            expiredtimestamp=timestamp+datetime.timedelta(seconds=3600) #Take current timestamp and increase it by an hour
+
+            # Is the current time an hour greater than orginal timestamp
+            if datetime.datetime.now() > expiredtimestamp:
+                getDataWrite=True
+            else:
+                getDataWrite=False
+                i686=pickle.load(pkgCache)
+                x86_64=pickle.load(pkgCache)
             pkgCache.close()
         else:
+            getDataWrite=True
+        
+        if getDataWrite:
             #Fetches Website
             data=getData()
             if data:
