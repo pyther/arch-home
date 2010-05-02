@@ -4,15 +4,15 @@
 def cut(pkgname,pkgver):
     maxL = 24 #max charcaters before split
 
-    p=['','']
-
     pkgver,pkgrel=pkgver.split('-')
-    pkgrel='-'+pkgrel #addes a dash in front of release number
 
-    p[0]=pkgname+' '+pkgver+pkgrel #Tooltip
+    pkgfull=pkgname+' '+pkgver+'-'+pkgrel #Tooltip
+    # p[0] = tooltip
+    # p[1] = display name
+    p=[pkgfull,pkgfull]
 
     #Remove the release number
-    if len(pkgname) > maxL:
+    if len(p[1]) > maxL:
         p[1]=pkgname+' '+pkgver
 
         #Remove the pkg version
@@ -22,10 +22,7 @@ def cut(pkgname,pkgver):
             #In the unsual case that the pkgname is bigger than the allowed max characters
             #Cut the pkgname
             if len(p[1]) > maxL:
-                p[0]=p[1][:maxL]
-
-    else:
-        p[1]=pkgname+' '+pkgver+pkgrel
+                p[1]=p[1][:maxL]
 
     return p
 
