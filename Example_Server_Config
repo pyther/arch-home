@@ -4,6 +4,8 @@ See webpy install instrucitons at http://webpy.org/install
 
 Apache fastcgi .htaccess example:
 
+UNCOMMENT: web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr) in index.py
+
 SetHandler fcgid-script
 Options +ExecCGI
   

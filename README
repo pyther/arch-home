@@ -34,7 +34,10 @@ Download:
 How to use:
 
     Configure webserver to use this webpy script. (See Example_Server_Config)
-    
+
+    APACHE USERS: uncomment this: web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
+
+
         or...
         
     Execute ./index.py  (Use this only for personal usage, do not publish on the web!) 
