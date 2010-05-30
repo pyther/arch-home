@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
 
-def cut(pkgname,pkgver):
+def cut(pkgname):
     maxL = 24 #max charcaters before split
+
+    pkgname,pkgver=pkgname.split(' ')[:2]
 
     pkgver,pkgrel=pkgver.split('-')
 
@@ -32,9 +34,9 @@ class Arch:
     def __init__(self):
         self.packages=[]
 
-    def add_package(self, pkgname, pkgver, pkgurl, pkgrepo, pkgdesc):
+    def add_package(self, pkgname, pkgurl, pkgrepo, pkgdesc):
 
-        pkg_name, pkg_name_short = cut(pkgname, pkgver)
+        pkg_name, pkg_name_short = cut(pkgname)
 
         self.packages.append({'pkgname':pkg_name, 'short_pkgname':pkg_name_short, 'pkgurl':pkgurl, 'pkgrepo':pkgrepo, "pkgdesc":pkgdesc})
 

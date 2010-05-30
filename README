@@ -35,7 +35,7 @@ How to use:
 
     Configure webserver to use this webpy script. (See Example_Server_Config)
 
-    APACHE USERS: uncomment this: web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
+    APACHE USERS: uncomment this in index.py: web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
 
 
         or...

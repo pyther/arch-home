@@ -2,16 +2,12 @@
 
 import web
 
-import urllib
-from BeautifulSoup import BeautifulSoup
-
 import feedparser
 import feedcache
 
 import sys
 import shelve
 
-import cPickle as pickle
 import os.path
 import datetime
 
@@ -29,83 +25,31 @@ app = web.application(urls, globals())
 web.template.Template.globals['render'] = render
 
 #Downloads RSS for news feed items
-def get_newsFeed():
+def getFeeds():
 
     #Time until cached feeds expire
     timeToLiveSeconds=3600   #60 Minutes
 
     #Stores file as .nfeed_cache in CWD
-    storage = shelve.open('./cache/nfeed_cache')
-
-    fc = feedcache.Cache(storage)
+    newsPath = shelve.open('./cache/news_cache')
+    anyPath = shelve.open('./cache/any_cache')
+    i686Path = shelve.open('./cache/i686_cache')
+    x86_64Path = shelve.open('./cache/x86_64_cache')
 
     #Fetches the feed from cache or from the website
-    nfeed = fc.fetch('http://www.archlinux.org/feeds/news/')
+    news = feedcache.Cache(newsPath).fetch('http://www.archlinux.org/feeds/news/')
+    Any = feedcache.Cache(anyPath).fetch('http://www.archlinux.org/feeds/packages/any/')
+    i686 = feedcache.Cache(i686Path).fetch('http://www.archlinux.org/feeds/packages/i686/')
+    x86_64 = feedcache.Cache(x86_64Path).fetch('http://www.archlinux.org/feeds/packages/x86_64/')
 
     #Closes feed
-    storage.close()
+    newsPath.close()
+    anyPath.close()
+    i686Path.close()
+    x86_64Path.close()
 
-    return nfeed
+    return news, Any, i686, x86_64
 
-#Downloads latest package listing from website
-def getData():
-    url="http://www.archlinux.org/packages/?sort=-last_update"
-    try:
-        data=urllib.urlopen(url)
-    except IOError:
-        data=''
-
-    return data
-
-
-def filterPackages(data):
-    bs = BeautifulSoup(data)
-    pkgs=bs.find('table', {"class" : "results"})
-    pkgs=pkgs.findAll('tr', {"class": ["pkgr1","pkgr2"]})
-
-    pkgname=[]
-    pkgver=[]
-    pkgarch=[]
-    pkgrepo=[]
-    pkgurl=[]
-    pkgdesc=[]
-
-    for x in range(len(pkgs)):
-        # 0 - Arch         1 - Repo
-        # 2 - URL          3 - Version
-        # 4 - Description  5 - Date
-        pkg=pkgs[x].findAll('td')
-        
-        arch=str(pkg[0].contents[0])
-        repo=str(pkg[1].contents[0])
-        name=str(pkg[2].a.contents[0])
-        url='http://archlinux.org'+str(pkg[2].contents).split('"')[1]
-        version=str(pkg[3].contents[0])
-        desc=str(pkg[4].contents[0])
-        date=str(pkg[5].contents[0])
-
-        pkgarch.append(arch)
-        pkgrepo.append(repo)
-        pkgname.append(name)
-        pkgurl.append(url)
-        pkgver.append(version)
-        pkgdesc.append(desc)
-
-
-    pkglist=zip(pkgarch, pkgrepo, pkgname, pkgurl, pkgver, pkgdesc)        
-    
-    i686=Arch()
-    x86_64=Arch()
-
-    #Loop runs twice, once for i686 and once for x86_64
-    for arch_name, arch_list in ( ('i686', i686), ('x86_64', x86_64) ):
-        filtered_packages = [pkg for pkg in pkglist if (arch_name in pkg[0] or 'any' in pkg[0]) ]
-
-        #print filtered_packages
-        for pkg in filtered_packages[:5]:
-            #Name, Version, URL, Repo
-            arch_list.add_package(pkg[2],pkg[4],pkg[3],pkg[1],pkg[5])
-    return (i686, x86_64) 
 
 
 class index:
@@ -114,47 +58,30 @@ class index:
         #web.header('Content-Type','application/xhtml+xml; charset=utf-8')
 
         # Store title and url for news together, only store 4 entries
-        nfeed = get_newsFeed();
-        news = [(x.title, x.link) for x in nfeed.entries][:4]      
+        newsFeed, AnyFeed, i686Feed, x86_64Feed = getFeeds();
         
-        pklFile='./cache/pkgdata.pkl'
-        if os.path.isfile(pklFile):
-            pkgCache = open(pklFile, 'rb')
-            # Try to load variable from pickle file
-            # If the loading fails then getDataWrite gets set to True   
-            # Resulting in the pickle file being overwritten 
-            try:
-                timestamp=pickle.load(pkgCache)
-                i686=pickle.load(pkgCache)
-                x86_64=pickle.load(pkgCache)
-            except EOFError:
-                getDataWrite=True
-            else:
-                expiredtimestamp=timestamp+datetime.timedelta(seconds=3600) #Take timestamp and increase it by an hour
+        news = [(x.title, x.link) for x in newsFeed.entries][:4]      
+        anyPKG = [(x.title, x.category, x.link, x.summary, datetime.datetime.strptime(x.updated, "%a, %d %b %Y %H:%M:%S -0400")) for x in AnyFeed.entries]
+        i686PKG = [(x.title, x.category, x.link, x.summary, datetime.datetime.strptime(x.updated, "%a, %d %b %Y %H:%M:%S -0400")) for x in i686Feed.entries]
+        x86_64PKG = [(x.title, x.category, x.link, x.summary, datetime.datetime.strptime(x.updated, "%a, %d %b %Y %H:%M:%S -0400")) for x in x86_64Feed.entries]
 
-                # Is the current time an hour greater than orginal timestamp
-                if datetime.datetime.now() > expiredtimestamp:
-                    getDataWrite=True
-                else:
-                    getDataWrite=False
-                pkgCache.close()
-        else:
-            getDataWrite=True
+        i686PKG = anyPKG + i686PKG
+        #Sort packages by date
+        i686PKG=sorted(i686PKG, key=lambda l: l[4], reverse=True)
+
+        x86_64PKG = anyPKG + x86_64PKG
+        #Sort Packages by Date
+        x86_64PKG=sorted(x86_64PKG, key=lambda l: l[4], reverse=True)
+
+        i686=Arch()
+        x86_64=Arch()
+
+        for p in i686PKG:
+            i686.add_package(p[0],p[2],p[1],p[3])
+
+        for p in x86_64PKG:
+            x86_64.add_package(p[0],p[2],p[1],p[3])
         
-        if getDataWrite:
-            #Fetches Website
-            data=getData()
-            if data:
-                i686, x86_64 = filterPackages(data)
-                pkgCache = open(pklFile, 'wb')
-                pickle.dump(datetime.datetime.now(), pkgCache)
-                pickle.dump(i686, pkgCache)
-                pickle.dump(x86_64, pkgCache)
-                pkgCache.close()
-            else:
-                i686=Arch()
-                x86_64=Arch()
-
         return render.index(news, i686, x86_64)
 
     #This function will get the search query and process it...
