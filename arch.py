@@ -34,6 +34,7 @@ class Arch:
     def __init__(self):
         self.packages=[]
 
+    # Takes PKG Name, URL, Repo, and Description and adds to it packages
     def add_package(self, pkgname, pkgurl, pkgrepo, pkgdesc):
 
         pkg_name, pkg_name_short = cut(pkgname)
@@ -41,6 +42,13 @@ class Arch:
         self.packages.append({'pkgname':pkg_name, 'short_pkgname':pkg_name_short, 'pkgurl':pkgurl, 'pkgrepo':pkgrepo, "pkgdesc":pkgdesc})
 
         return
+
+    # Takes a list of tuples in the formant of (Package Name, Repo, Link, and Description)
+    def add_packages(self, pkgs):
+        for p in pkgs:
+            self.add_package(p[0],p[2],p[1],p[3])
+        return
+
 
     def length(self):
         return len(self.packages)
