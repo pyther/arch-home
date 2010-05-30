@@ -13,6 +13,9 @@ import datetime
 
 from arch import Arch
 
+maxPKGS=6
+maxNEWS=4
+
 urls = (
   '/', 'index'
 )
@@ -32,23 +35,20 @@ def getFeeds():
 
     #Stores file as .nfeed_cache in CWD
     newsPath = shelve.open('./cache/news_cache')
-    anyPath = shelve.open('./cache/any_cache')
     i686Path = shelve.open('./cache/i686_cache')
     x86_64Path = shelve.open('./cache/x86_64_cache')
 
     #Fetches the feed from cache or from the website
     news = feedcache.Cache(newsPath).fetch('http://www.archlinux.org/feeds/news/')
-    Any = feedcache.Cache(anyPath).fetch('http://www.archlinux.org/feeds/packages/any/')
     i686 = feedcache.Cache(i686Path).fetch('http://www.archlinux.org/feeds/packages/i686/')
     x86_64 = feedcache.Cache(x86_64Path).fetch('http://www.archlinux.org/feeds/packages/x86_64/')
 
     #Closes feed
     newsPath.close()
-    anyPath.close()
     i686Path.close()
     x86_64Path.close()
 
-    return news, Any, i686, x86_64
+    return news, i686, x86_64
 
 
 
@@ -58,42 +58,18 @@ class index:
         #web.header('Content-Type','application/xhtml+xml; charset=utf-8')
 
         # Store title and url for news together, only store 4 entries
-        newsFeed, AnyFeed, i686Feed, x86_64Feed = getFeeds();
+        newsFeed, i686Feed, x86_64Feed = getFeeds();
         
-        news = [(x.title, x.link) for x in newsFeed.entries][:4]      
-        anyPKG = [(x.title, x.category, x.link, x.summary, datetime.datetime.strptime(x.updated, "%a, %d %b %Y %H:%M:%S -0400")) for x in AnyFeed.entries]
-        i686PKG = [(x.title, x.category, x.link, x.summary, datetime.datetime.strptime(x.updated, "%a, %d %b %Y %H:%M:%S -0400")) for x in i686Feed.entries]
-        x86_64PKG = [(x.title, x.category, x.link, x.summary, datetime.datetime.strptime(x.updated, "%a, %d %b %Y %H:%M:%S -0400")) for x in x86_64Feed.entries]
-
-        print "Any PKGS:"
-        for x in anyPKG: print x[0]
-        print "\n"
-        print "i686 PKGS:"
-        for x in i686PKG: print x[0]
-        print "\n"
-
-        i686PKG = anyPKG + i686PKG
-        
-        print "Merged:"
-        for x in i686PKG: print x[0]
-        
-        #Sort packages by date
-        #i686PKG=sorted(i686PKG, key=lambda l: l[4], reverse=True)
-
-        x86_64PKG = anyPKG 
-#+ x86_64PKG
-        #Sort Packages by Date
-        #x86_64PKG=sorted(x86_64PKG, key=lambda l: l[4], reverse=True)
+        news = [(x.title, x.link) for x in newsFeed.entries][:maxNEWS]      
+        i686PKGs = [(x.title, x.category, x.link, x.summary) for x in i686Feed.entries][:maxPKGS]
+        x86_64PKGs = [(x.title, x.category, x.link, x.summary) for x in x86_64Feed.entries][:maxPKGS]
 
         i686=Arch()
         x86_64=Arch()
 
-        for p in i686PKG:
-            i686.add_package(p[0],p[2],p[1],p[3])
-
-        for p in x86_64PKG:
-            x86_64.add_package(p[0],p[2],p[1],p[3])
-        
+        i686.add_packages(i686PKGs)
+        x86_64.add_packages(x86_64PKGs)
+ 
         return render.index(news, i686, x86_64)
 
     #This function will get the search query and process it...
