@@ -52,9 +52,9 @@ def getFeeds():
     x86_64Path = shelve.open('./cache/x86_64_cache')
 
     #Fetches the feed from cache or from the website
-    news = feedcache.Cache(newsPath).fetch('http://www.archlinux.org/feeds/news/')
-    i686 = feedcache.Cache(i686Path).fetch('http://www.archlinux.org/feeds/packages/i686/')
-    x86_64 = feedcache.Cache(x86_64Path).fetch('http://www.archlinux.org/feeds/packages/x86_64/')
+    news = feedcache.Cache(newsPath,timeToLiveSeconds).fetch('http://www.archlinux.org/feeds/news/')
+    i686 = feedcache.Cache(i686Path,timeToLiveSeconds).fetch('http://www.archlinux.org/feeds/packages/i686/')
+    x86_64 = feedcache.Cache(x86_64Path,timeToLiveSeconds).fetch('http://www.archlinux.org/feeds/packages/x86_64/')
 
     #Closes feed
     newsPath.close()
