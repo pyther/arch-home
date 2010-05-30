@@ -65,13 +65,25 @@ class index:
         i686PKG = [(x.title, x.category, x.link, x.summary, datetime.datetime.strptime(x.updated, "%a, %d %b %Y %H:%M:%S -0400")) for x in i686Feed.entries]
         x86_64PKG = [(x.title, x.category, x.link, x.summary, datetime.datetime.strptime(x.updated, "%a, %d %b %Y %H:%M:%S -0400")) for x in x86_64Feed.entries]
 
-        i686PKG = anyPKG + i686PKG
-        #Sort packages by date
-        i686PKG=sorted(i686PKG, key=lambda l: l[4], reverse=True)
+        print "Any PKGS:"
+        for x in anyPKG: print x[0]
+        print "\n"
+        print "i686 PKGS:"
+        for x in i686PKG: print x[0]
+        print "\n"
 
-        x86_64PKG = anyPKG + x86_64PKG
+        i686PKG = anyPKG + i686PKG
+        
+        print "Merged:"
+        for x in i686PKG: print x[0]
+        
+        #Sort packages by date
+        #i686PKG=sorted(i686PKG, key=lambda l: l[4], reverse=True)
+
+        x86_64PKG = anyPKG 
+#+ x86_64PKG
         #Sort Packages by Date
-        x86_64PKG=sorted(x86_64PKG, key=lambda l: l[4], reverse=True)
+        #x86_64PKG=sorted(x86_64PKG, key=lambda l: l[4], reverse=True)
 
         i686=Arch()
         x86_64=Arch()
