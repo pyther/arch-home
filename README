@@ -10,7 +10,6 @@ Features
     * Latest Packages
     * Google Search
     * Arch Search (Forums, Wiki, AUR, and Bugs)
-    * Arch Logo
     * Testing Packages in Italics
 
 Link:
@@ -21,9 +20,8 @@ Dependencies:
     * Python 2.6
     * python-feedparser 4.1 - http://www.feedparser.org/
     * feedcache 1.3.1 - http://www.doughellmann.com/projects/feedcache/
-    * BeautifulSoup
-    * webpy 3.0 - http://webpy.org/
-    * python-flup 1.0.1 (really a webpy depend)
+    * webpy >=3.0 - http://webpy.org/
+    * python-flup (really a webpy depend)
 
 
 Download:
@@ -35,12 +33,12 @@ How to use:
 
     Configure webserver to use this webpy script. (See Example_Server_Config)
 
-    APACHE USERS: uncomment this in index.py: web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
+    APACHE USERS: Make sure to set SERVER="" to apache otherwise the script will fail to load!
 
 
         or...
         
-    Execute ./index.py  (Use this only for personal usage, do not publish on the web!) 
+    Execute ./index.py  - This will uses webpy's built-in devolopment server
 
 
 Bugs/Feature Requests:
