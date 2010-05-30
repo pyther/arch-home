@@ -1,5 +1,21 @@
 #!/usr/bin/env python
 
+############################################################################################
+#  User Settings:                                                                          #
+#    maxPKGS = Maximum Number of Packages to show                                          #
+#    maxNEWS = Maxium Number of News Items to show                                         #
+#    SERVER  = The server that you'll be running  the script through. Some servers         #
+#               such as apache require webpy to explictly to tell it to run the script as  #
+#               fastcgi app. Possible values are: lighttpd, apache, webpy                  #
+#                                                                                          #
+############################################################################################
+
+maxPKGS=6
+maxNEWS=4
+SERVER='webpy'
+
+################################### END OF USER SETTINGS ###################################
+
 import web
 
 import feedparser
@@ -12,9 +28,6 @@ import os.path
 import datetime
 
 from arch import Arch
-
-maxPKGS=6
-maxNEWS=4
 
 urls = (
   '/', 'index'
@@ -99,6 +112,10 @@ class index:
             return web.badrequest()
 
 if __name__ == "__main__":
-    #Tells apache we want the script to act as a fastcgi server
-    #web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
-    app.run()
+    if SERVER is "webpy" or SERVER is "lighttpd":
+        app.run()
+    elif SERVER is "apache":
+        #Tells apache we want the script to act as a fastcgi server
+        web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
+    else:
+        print "Unkown web server: " + SERVER
