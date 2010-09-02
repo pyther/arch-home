@@ -97,7 +97,7 @@ class index:
         if sub == 1:
             url="http://google.com/search?q="+query
         elif sub == 2:
-            url='http://bbs.archlinux.org/search.php?action=search&keywords='+query+'&show_as=topics'
+            url='https://bbs.archlinux.org/search.php?action=search&keywords='+query+'&show_as=topics'
         elif sub == 3:
             url='http://wiki.archlinux.org/index.php/Special:Search?search='+query
         elif sub == 4:
