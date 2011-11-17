@@ -99,11 +99,11 @@ class index:
         elif sub == 2:
             url='https://bbs.archlinux.org/search.php?action=search&keywords='+query+'&show_as=topics'
         elif sub == 3:
-            url='http://wiki.archlinux.org/index.php/Special:Search?search='+query
+            url='https://wiki.archlinux.org/index.php/Special:Search?search='+query
         elif sub == 4:
-            url='http://aur.archlinux.org/packages.php?K='+query 
+            url='https://aur.archlinux.org/packages.php?K='+query 
         elif sub == 5:
-            url='http://bugs.archlinux.org/index.php?string='+query
+            url='https://bugs.archlinux.org/index.php?string='+query
         
         #Redirect if we have a url
         if url:
