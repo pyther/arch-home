@@ -72,8 +72,8 @@ class index:
 
         # Store title and url for news together, only store 4 entries
         newsFeed, i686Feed, x86_64Feed = getFeeds();
-        
-        news = [(x.title, x.link) for x in newsFeed.entries][:maxNEWS]      
+
+        news = [(x.title, x.link) for x in newsFeed.entries][:maxNEWS]
         i686PKGs = [(x.title, x.category, x.link, x.summary) for x in i686Feed.entries][:maxPKGS]
         x86_64PKGs = [(x.title, x.category, x.link, x.summary) for x in x86_64Feed.entries][:maxPKGS]
 
@@ -82,7 +82,7 @@ class index:
 
         i686.add_packages(i686PKGs)
         x86_64.add_packages(x86_64PKGs)
- 
+
         return render.index(news, i686, x86_64)
 
     #This function will get the search query and process it...
@@ -93,7 +93,7 @@ class index:
         query = i.q
 
         url=None
- 
+
         if sub == 1:
             url="http://google.com/search?q="+query
         elif sub == 2:
@@ -101,10 +101,10 @@ class index:
         elif sub == 3:
             url='https://wiki.archlinux.org/index.php/Special:Search?search='+query
         elif sub == 4:
-            url='https://aur.archlinux.org/packages.php?K='+query 
+            url='https://aur.archlinux.org/packages.php?K='+query
         elif sub == 5:
             url='https://bugs.archlinux.org/index.php?string='+query
-        
+
         #Redirect if we have a url
         if url:
             return web.Found(url)
