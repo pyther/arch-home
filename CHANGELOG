@@ -1,5 +1,10 @@
 CHANGELOG
 
+12/12/2011
+    -Improved load time, by fetching news & pkg info using ajax
+    -Bad Feed cache will be deleted automatically
+    -HTTPS in all archlinux urls
+
 04/28/2010
     -Packages are fetched from http://www.archlinux.org/packages/?sort=-last_update
     -Packages are cached for 60 minutes
