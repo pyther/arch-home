@@ -1,9 +1,17 @@
-$def with (news, i686, x86_64)
+$def with ()
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
+        <script type="text/javascript" src="./static/jquery.js"></script>
+        <script type="text/javascript">
+                \$(document).ready(function () {
+                    \$('#top').load('./fetch?feed=news');
+                    \$('#i686pkgs').load('./fetch?feed=i686');
+                    \$('#x86_64pkgs').load('./fetch?feed=x86_64');
+                });
+        </script>
         <title>Home Page</title>
         <style type="text/css">
             #top{
@@ -12,6 +20,7 @@ $def with (news, i686, x86_64)
                 font-family: "DejaVu Sans", "Bitstreams Vera Sans", helvetica, arial;
                 padding: 0.18em;
                 margin: 0px;
+                height: auto;
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -102,15 +111,9 @@ $def with (news, i686, x86_64)
         </style>
     </head>
     <body onload="document.forms['f'].elements['q'].focus();">
-        $#Links
-        $if news:
             <div id="top">
-                News:
-                <a href="$:news[0][1]">$:news[0][0]</a>&nbsp;-&nbsp;
-                <a href="$:news[1][1]">$:news[1][0]</a>&nbsp;-&nbsp; 
-                <a href="$:news[2][1]">$:news[2][0]</a>&nbsp;-&nbsp;
-                <a href="$:news[3][1]">$:news[3][0]</a>
-            </div> 
+                News: Loading...
+            </div>
         <div id="cont">
                 <a href="http://archlinux.org"><img src="static/logo.png" alt="Logo" /></a><br />
                 <form name="f" method="post" action="./">
@@ -132,23 +135,19 @@ $def with (news, i686, x86_64)
             <h2>Recent Updates</h2>
                 <div id="i686">
                     <h3>i686</h3>
-                    <ul>
-                        $for x in i686.packages:
-                            $if x['pkgrepo']=="Testing" or x['pkgrepo']=="Community-Testing":
-                                <li style="font-style: italic;" title="$x['pkgname'] - $x['pkgdesc']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
-                            $else:
-                                <li title="$x['pkgname'] - $x['pkgdesc']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
-                    </ul>
+                    <div id="i686pkgs">
+                        <ul>
+                            <li>Loading...</li>
+                        </ul>
+                    </div>
                 </div>
                 <div id="x86_64">
                     <h3>x86_64</h3>
-                    <ul>
-                        $for x in x86_64.packages:
-                            $if x['pkgrepo']=="Testing" or x['pkgrepo']=="Community-Testing":
-                                <li style="font-style: italic;" title="$x['pkgname'] - $x['pkgdesc']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
-                            $else:
-                                <li title="$x['pkgname'] - $x['pkgdesc']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
-                    </ul>
+                    <div id="x86_64pkgs">
+                        <ul>
+                            <li>Loading...</li>
+                        </ul>
+                    </div>
                 </div>
         </div>
         <div id="footer">
