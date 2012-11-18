@@ -12,7 +12,7 @@
 
 maxPKGS=6
 maxNEWS=4
-SERVER='webpy'
+SERVER='fastcgi'
 
 ################################### END OF USER SETTINGS ###################################
 
@@ -159,10 +159,10 @@ class fetchFeeds:
 
 
 if __name__ == "__main__":
-    if SERVER is "webpy" or SERVER is "lighttpd":
+    if SERVER is "webpy":
         app.run()
-    elif SERVER is "apache":
-        #Tells apache we want the script to act as a fastcgi server
+    elif SERVER is "fastcgi":
+        # Setup webpy to act like a fastcgi server
         web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
         app.run()
     else:
