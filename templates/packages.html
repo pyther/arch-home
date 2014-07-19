@@ -1,9 +1,0 @@
-$def with (arch)
-
-<ul>
-    $for x in arch.packages:
-        $if x['pkgrepo']=="Testing" or x['pkgrepo']=="Community-Testing":
-            <li style="font-style: italic;" title="$x['pkgname'] - $x['pkgdesc']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
-        $else:
-            <li title="$x['pkgname'] - $x['pkgdesc']"><a href="$x['pkgurl']">$x['short_pkgname']</a></li>
-</ul>

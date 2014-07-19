@@ -1,169 +1,117 @@
 #!/usr/bin/env python2
 
-############################################################################################
-#  User Settings:                                                                          #
-#    maxPKGS = Maximum Number of Packages to show                                          #
-#    maxNEWS = Maxium Number of News Items to show                                         #
-#    SERVER  = The server that you'll be running  the script through. Some servers         #
-#               such as apache require webpy to explictly to tell it to run the script as  #
-#               fastcgi app. Possible values are: lighttpd, apache, webpy                  #
-#                                                                                          #
-############################################################################################
-
-maxPKGS=6
-maxNEWS=4
-SERVER='fastcgi'
-
-################################### END OF USER SETTINGS ###################################
-
-import web
-
 import feedparser
-import feedcache
+import pickle
+import time
 
-import sys
-import shelve
+from flask import Flask
+from flask import render_template, abort
 
-import os
-import datetime
+MAX_PKGS = 8
 
-from arch import Arch
+app = Flask(__name__)
+app.config['PROPAGATE_EXCEPTIONS'] = True
 
-urls = (
-  '/', 'index',
-  '/fetch', 'fetchFeeds'
-)
+def format_pkg_name(pkg):
+    maxL = 24
 
-web.config.debug = True
+    name,ver = pkg.split(' ')[:2]
+    ver,rel = ver.split('-')
 
-render = web.template.render('templates')
+    full_name = '{0} {1}-{2}'.format(name, ver, rel)
 
-app = web.application(urls, globals())
-web.template.Template.globals['render'] = render
+    if len(full_name) <= maxL:
+        return (full_name, full_name)
 
-#Time until cached feeds expire
-timeToLiveSeconds=3600   #60 Minutes
+    short_name = '{0} {1}'.format(name, ver)
 
-# Feeds
-newsRss='http://www.archlinux.org/feeds/news/'
-x86Rss='http://www.archlinux.org/feeds/packages/i686/'
-x64Rss='http://www.archlinux.org/feeds/packages/x86_64/'
+    if (len(short_name) <= maxL):
+        return (full_name, short_name)
 
-newsFile='./cache/news_cache'
-x86File='./cache/i686_cache'
-x64File='./cache/x86_64_cache'
+    short_name = name
 
-class index:
-    def GET(self):
+    if (len(short_name) <= maxL):
+        return (full_name, short_name)
 
-        #web.header('Content-Type','application/xhtml+xml; charset=utf-8')
-
-        return render.index()
-
-    #This function will get the search query and process it...
-    def POST(self):
-        i = web.input()
-
-        sub = int(i.sub)
-        query = i.q
-
-        url=None
-
-        if sub == 1:
-            url="http://google.com/search?q="+query
-        elif sub == 2:
-            url='https://bbs.archlinux.org/search.php?action=search&keywords='+query+'&show_as=topics'
-        elif sub == 3:
-            url='https://wiki.archlinux.org/index.php/Special:Search?search='+query
-        elif sub == 4:
-            url='https://aur.archlinux.org/packages.php?K='+query
-        elif sub == 5:
-            url='https://bugs.archlinux.org/index.php?string='+query
-
-        #Redirect if we have a url
-        if url:
-            return web.Found(url)
-        else:
-            return web.badrequest()
-
-class fetchFeeds:
-    def GET(self):
-        # Corrupt Cache
-        #  * Importing bsddb fails on many 2.7 instances,
-        #    python tries to import corrupt cached using bsddb, this fails
-        #  * DBPageNotFoundError, since python tried to import corrupt cache
-        #    as a bsddb file, and it is not, it will error out
-
-        i = web.input()
-        feed = web.websafe(i.feed)
-
-        if feed == 'news':
-            try:
-                newsCache = shelve.open(newsFile)
-            except ImportError:
-                os.remove(newsFile)
-                newsCache = shelve.open(newsFile)
-
-            try:
-                newsFeed = feedcache.Cache(newsCache,timeToLiveSeconds).fetch(newsRss)
-            except:
-                newsCache.close()
-                newsCache = shelve.open(newsFile)
-                os.remove(newsFile)
-                newsFeed = feedcache.Cache(newsCache,timeToLiveSeconds).fetch(newsRss)
-            newsCache.close()
-
-            news = [(x.title, x.link) for x in newsFeed.entries][:maxNEWS]
-            return render.news(news)
-        elif feed == 'i686':
-            try:
-                x86Cache = shelve.open(x86File)
-            except:
-                os.remove(x86File)
-                x86Cache = shelve.open(x86File)
-
-            try:
-                x86Feed = feedcache.Cache(x86Cache,timeToLiveSeconds).fetch(x86Rss)
-            except:
-                x86Cache.close()
-                os.remove(x86File)
-                x86Cache = shelve.open(x86File)
-                x86Feed = feedcache.Cache(x86Cache,timeToLiveSeconds).fetch(x86Rss)
-            x86Cache.close()
-
-            x86Pkgs = [(x.title, x.category, x.link, x.summary) for x in x86Feed.entries][:maxPKGS]
-            x86=Arch()
-            x86.add_packages(x86Pkgs)
-
-            return render.packages(x86)
-        elif feed == 'x86_64':
-            try:
-                x64Cache = shelve.open(x64File)
-            except ImportError:
-                os.remove(x64File)
-                x64Cache = shelve.open(x64File)
-
-            try:
-                x64Feed = feedcache.Cache(x64Cache,timeToLiveSeconds).fetch(x64Rss)
-            except:
-                x64Cache.close()
-                os.remove(x64File)
-                x64Cache = shelve.open(x64File)
-                x64Feed = feedcache.Cache(x64Cache,timeToLiveSeconds).fetch(x64Rss)
-            x64Cache.close()
-
-            x64Pkgs = [(x.title, x.category, x.link, x.summary) for x in x64Feed.entries][:maxPKGS]
-            x64=Arch()
-            x64.add_packages(x64Pkgs)
-        return render.packages(x64)
+    return (full_name, short_name[:maxL])
 
 
-if __name__ == "__main__":
-    if SERVER is "webpy":
-        app.run()
-    elif SERVER is "fastcgi":
-        # Setup webpy to act like a fastcgi server
-        web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
-        app.run()
+@app.route('/feed/<feed>/<arch>')
+def fetch_feed2(feed, arch):
+    return arch
+
+@app.route('/feed/<name>')
+def fetch_feed(name):
+    if name == 'news':
+        rss_feed = 'http://www.archlinux.org/feeds/news/'
+        cache_file = './cache/news'
+    elif name == 'pkgs_x64':
+        rss_feed = 'http://www.archlinux.org/feeds/packages/x86_64/'
+        cache_file = './cache/pkgs_x64'
+    elif name == 'pkgs_x86':
+        rss_feed = 'http://www.archlinux.org/feeds/packages/i686/'
+        cache_file = './cache/pkgs_x86'
     else:
-        print "Unkown web server: " + SERVER
+        abort(404)
+
+    def write_feed(cache_file, feed):
+        data=(time.time(), feed)
+        pickle.dump(data, open(cache_file, "wb"))
+        return
+
+    expire_cache = 3600
+    mtime = None
+
+    try:
+        cache = pickle.load(open(cache_file, 'rb'))
+    except (IOError, KeyError) as e:
+        # nothing to do, this is expecte
+        pass
+    else:
+        mtime, cached_feed = cache
+
+    # we must have a valid cache file
+    if mtime:
+        now = time.time()
+        diff = int(now - mtime)
+
+        # if cache file is stale
+        if diff > expire_cache:
+            feed = feedparser.parse(rss_feed, etag=cached_feed.etag)
+            # feed has not been modified, update mtime so we don't check again
+            if d2.status == 304:
+                feed = cached_feed
+                # write updated mtime to pickle file
+                write_feed(cache_file, feed)
+            # feed has been modified, lets update our cache
+            else:
+                # write new data pickle file
+                write_feed(cache_file, feed)
+        # cache is not stale, use cache
+        else:
+            feed = cached_feed
+    # no cache file, that is okay
+    else:
+        feed = feedparser.parse(rss_feed)
+        # write data to pickle file
+        write_feed(cache_file, feed)
+
+    if name == 'news':
+        items = [ (x.title, x.link) for x in feed.entries]
+        return render_template('news.html', news = items)
+    elif 'pkgs' in name:
+        pkgs = []
+        for x in feed.entries[:MAX_PKGS]:
+            full,short = format_pkg_name(x.title)
+            pkgs.append({'name':full, 'short_name':short, 'cat':x.category, 'link':x.link, 'summary':x.summary})
+        return render_template('pkgs.html', pkgs = pkgs)
+
+    return 'None'
+
+@app.route('/')
+def index():
+    return render_template("index.html")
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0',debug=True)
+

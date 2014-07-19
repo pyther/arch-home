@@ -1,0 +1,10 @@
+<ul>    
+{% for item in pkgs %}
+  {% if 'Testing' in item['cat'] %}
+    <li style="font-style: italic;" title="{{item['name']}} - {{item['summary']}}">
+  {% else %}
+    <li title="{{item['name']}} - {{item['summary']}}">
+  {% endif %}
+  <a href="{{item['link']}}">{{item['short_name']}}</a></li>
+{% endfor %}
+</ul>

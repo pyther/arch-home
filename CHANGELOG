@@ -1,5 +1,9 @@
 CHANGELOG
 
+07/29/2014
+    - rewrote app in flask
+    - store cache in local pickle file (removed dependency on feedcache)
+
 12/12/2011
     -Improved load time, by fetching news & pkg info using ajax
     -Bad Feed cache will be deleted automatically

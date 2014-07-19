@@ -1,158 +1,85 @@
-$def with ()
+<!doctype html>
+<html>
+<head>
+    <title>Home Page</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='jquery.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#top').load('{{ url_for('fetch_feed', name='news') }}');
+            $('#i686pkgs').load('{{ url_for('fetch_feed', name='pkgs_x86') }}');
+            $('#x86_64pkgs').load('{{ url_for('fetch_feed', name='pkgs_x64')}}');
+        });
+    </script>
+</head>
+<body onload="document.forms['f'].elements['q'].focus();">
+    <div id="top">
+        News: Loading...
+    </div>
+    <div id="content">
+        <a href="http://archlinux.org"><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" /></a><br />
+        <form name="f">
+            <input type="radio" name="sub" value="google" checked="checked"/><a href="http://google.com">Google</a> &nbsp;&nbsp;
+            <input type="radio" name="sub" value="bbs"/> <a href="https://bbs.archlinux.org">Forums</a> &nbsp;&nbsp;
+            <input type="radio" name="sub" value="wiki"/> <a href="https://wiki.archlinux.org">Wiki</a> &nbsp;&nbsp;
+            <input type="radio" name="sub" value="aur"/> <a href="https://aur.archlinux.org">AUR</a> &nbsp;&nbsp;
+            <input type="radio" name="sub" value="bugs"/> <a href="https://bugs.archlinux.org">Bugs</a>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+            <br /><br />
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
-        <script type="text/javascript" src="./static/jquery.js"></script>
-        <script type="text/javascript">
-                \$(document).ready(function () {
-                    \$('#top').load('./fetch?feed=news');
-                    \$('#i686pkgs').load('./fetch?feed=i686');
-                    \$('#x86_64pkgs').load('./fetch?feed=x86_64');
-                });
-        </script>
-        <title>Home Page</title>
-        <style type="text/css">
-            #top{
-                background: #f0f0f0;
-                font-size: 0.8em;
-                font-family: "DejaVu Sans", "Bitstreams Vera Sans", helvetica, arial;
-                padding: 0.18em;
-                margin: 0px;
-                height: auto;
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                white-space: nowrap;
-                overflow: hidden;
+            <input id="q" name="q" type="text" size="40" /><input id="search_btn" type="submit" value="Search" />
+
+        </form> 
+    </div>
+    <script>
+        $("form").submit(function( event ) {
+            var service = $("input[type='radio'][name='sub']:checked").val();
+            var query = $('#q').val()
+            switch(service) {
+                case 'google':
+                    var url='https://google.com/search?q=';
+                    break;
+                case 'bbs':
+                    var url='https://bbs.archlinux.org/search.php?action=search&show_as=topics&keywords=';
+                    break;
+                case 'wiki':
+                    var url='https://wiki.archlinux.org/index.php/Special:Search?search=';
+                    break;
+                case 'aur':
+                    var url='https://aur.archlinux.org/packages.php?K=';
+                    break;
+                case 'bugs':
+                    var url='https://bugs.archlinux.org/index.php?string=';
+                    break;
             }
-            #top a {
-                color: #0771a6;
-                text-decoration: none;
-            }
-            #top a:hover {
-                text-decoration: underline;
-            }
-            #cont{
-                width: 750px;
-                margin: 0 auto;
-                padding-top: 1em;
-                text-align: center;
-                font-family: helvetica, arial;
-                font-size: 0.78em;
-            }
-            #cont img {
-                border: 0;
-            }
-            #cont a, a:visited {
-                text-decoration: none;
-                color: #000;
-            }
-            #cont a:hover {
-                text-decoration: underline;
-            }
-            h2 {
-                font-size: 1em;
-                text-align: center;
-                color: #0771a6;
-                font-variant: small-caps;
-            }
-            h3 {
-                font-size: 0.9em;
-                margin-bottom: 0px;
-                text-align: center;
-            }
-            #updates {
-                font-family: "DejaVu Sans", "Bitstream Vera Sans", "Lucida Grande", Arial, sans-serif;
-                width: 26.2em;
-                margin-left: auto;
-                margin-right: auto;
-                margin-top: 2.5em;
-            }
-            #updates div {
-                display: inline-block;
-                vertical-align: top;
-            }
-            #updates div ul {
-                background-color: #f0f0f0;
-                list-style-type: none;
-                /*margin-left: 0.7em;*/
-                margin-top: 0em;
-                padding: 0.4em;
-                width: 12em;
-                font-size: 0.9em;
-                overflow: hidden;
-                white-space: nowrap;
-                border: gray 1px solid;
-                /*text-align: center;*/
-            }
-            #updates a {
-                color: #000;
-                text-decoration: none;
-            }
-            #i686 {
-                margin-left: 0em;
-            }
-            #x86_64 {
-                margin-left: 2.5em;
-            }
-            #footer {
-                font-family: "DejaVu Sans", "Bitstreams Vera Sans", helvetica, arial;
-                font-size: 0.8em;
-                padding-top: 2em;
-                text-align: center;
-            }
-            #footer a {
-                color: #0771A6;
-                text-decoration: none;
-            }
-        </style>
-    </head>
-    <body onload="document.forms['f'].elements['q'].focus();">
-            <div id="top">
-                News: Loading...
+            window.location = url + query;
+
+            event.preventDefault();
+            return false;
+        });
+    </script>
+    <div id="updates">
+        <h2>Recent Updates</h2>
+        <div id="i686">
+            <h3>i686</h3>
+            <div id="i686pkgs">
+                <ul>
+                    <li>Loading...</li>
+                </ul>
             </div>
-        <div id="cont">
-                <a href="http://archlinux.org"><img src="static/logo.png" alt="Logo" /></a><br />
-                <form name="f" method="post" action="./">
-                    <input type="radio" name="sub" value="1" checked="checked"/><a href="http://google.com">Google</a> &nbsp;&nbsp;
-                    <input type="radio" name="sub" value="2"/> <a href="https://bbs.archlinux.org">Forums</a> &nbsp;&nbsp;
-                    <input type="radio" name="sub" value="3"/> <a href="https://wiki.archlinux.org">Wiki</a> &nbsp;&nbsp;
-                    <input type="radio" name="sub" value="4"/> <a href="https://aur.archlinux.org">AUR</a> &nbsp;&nbsp;
-                    <input type="radio" name="sub" value="5"/> <a href="https://bugs.archlinux.org">Bugs</a>
-
-                    <br /><br />
-
-                    <input id="q" name="q" type="text" size="40" /><input id="search_btn" type="submit" value="Search" />
-                </form>
         </div>
-        <!--<script type="text/javascript" language="javascript">
-            document.forms['f'].elements['q'].focus();
-        </script>-->
-        <div id="updates">
-            <h2>Recent Updates</h2>
-                <div id="i686">
-                    <h3>i686</h3>
-                    <div id="i686pkgs">
-                        <ul>
-                            <li>Loading...</li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="x86_64">
-                    <h3>x86_64</h3>
-                    <div id="x86_64pkgs">
-                        <ul>
-                            <li>Loading...</li>
-                        </ul>
-                    </div>
-                </div>
+        <div id="x86_64">
+            <h3>x86_64</h3>
+            <div id="x86_64pkgs">
+                <ul>
+                    <li>Loading...</li>
+                </ul>
+            </div>
         </div>
-        <div id="footer">
-            Inspired by the <a href="http://bbs.archlinux.org/viewtopic.php?id=69554&amp;p=1">Arch Linux Community</a>. Source at <a href="http://github.com/pyther/arch-home/">github.com</a><br/>
-            The Arch Linux name and logo are recognized <a href="http://wiki.archlinux.org/index.php/DeveloperWiki:TrademarkPolicy">trademarks</a>. Some rights reserved.
-        </div>
-    </body>
+    </div>
+    <div id="footer">
+        Inspired by the <a href="http://bbs.archlinux.org/viewtopic.php?id=69554&amp;p=1">Arch Linux Community</a>. Source at <a href="http://github.com/pyther/arch-
+        The Arch Linux name and logo are recognized <a href="http://wiki.archlinux.org/index.php/DeveloperWiki:TrademarkPolicy">trademarks</a>. Some rights reserved.
+    </div>
+</body>
 </html>

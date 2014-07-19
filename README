@@ -2,7 +2,7 @@ arch-home
 Contact: pyther@pyther.net
 Website: http://pyther.net/projects/arch-home/
 
-Description: arch-home is a webpy script that generates an Arch Linux homepage.
+Description: arch-home is a flask app that generates an Arch Linux homepage.
 
 Features
 
@@ -13,32 +13,20 @@ Features
     * Testing Packages in Italics
 
 Link:
-    http://home.archlinux.ca - Big Thanks to Dusty for hosting this!
+    http://arch.pyther.net
 
 Dependencies:
-
     * Python 2.6
+    * flask
     * python-feedparser 4.1 - http://www.feedparser.org/
-    * feedcache 1.3.1 - http://www.doughellmann.com/projects/feedcache/
-    * webpy >=3.0 - http://webpy.org/
-    * python-flup (really a webpy depend)
 
 
-Download:
-
-    - Development Code (git): http://github.com/pyther/arch-home 
-    - Stable Releases: http://github.com/pyther/arch-home/downloads
-
-How to use:
-
-    Configure webserver to use this webpy script. (See Example_Server_Config)
-
-    APACHE USERS: Make sure to set SERVER="" to apache otherwise the script will fail to load!
+Deploying
+  * http://flask.pocoo.org/docs/deploying/
 
 
-        or...
-        
-    Execute ./index.py  - This will uses webpy's built-in devolopment server
+Testing
+  python2 index.py
 
 
 Bugs/Feature Requests:
@@ -52,4 +40,4 @@ Notes:
 
 TODO:
     *Allow user to exclude testing and community packages
-     
+
