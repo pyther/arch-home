@@ -39,13 +39,13 @@ def format_pkg_name(pkg):
 @app.route('/feed/<name>')
 def fetch_feed(name):
     if name == 'news':
-        rss_feed = 'http://www.archlinux.org/feeds/news/'
+        rss_feed = 'https://www.archlinux.org/feeds/news/'
         cache_file = './cache/news'
     elif name == 'pkgs_x64':
-        rss_feed = 'http://www.archlinux.org/feeds/packages/x86_64/'
+        rss_feed = 'https://www.archlinux.org/feeds/packages/x86_64/'
         cache_file = './cache/pkgs_x64'
     elif name == 'pkgs_x86':
-        rss_feed = 'http://www.archlinux.org/feeds/packages/i686/'
+        rss_feed = 'https://www.archlinux.org/feeds/packages/i686/'
         cache_file = './cache/pkgs_x86'
     else:
         abort(404)
